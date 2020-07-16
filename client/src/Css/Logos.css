@@ -1,0 +1,29 @@
+.App-logo {
+    width: 13%;
+    height: auto;
+}
+
+#imgLogo {
+    width: 75%;
+    height: auto;
+}
+
+.profile-pic {
+    height: 60px;
+    min-width: 60px;
+    margin: 0px 5px 0px 0px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+.logo-pic {
+    height: 5rem;
+    width: 100%;
+}
+
+#imgLogo {
+    animation: fadeIn ease 3s;
+}
