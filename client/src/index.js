@@ -8,9 +8,11 @@ import 'react-vis/dist/style.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
-import { MainPage } from './Pages/home';
-import { LoginForm } from './Components/LoginForm';
-import { Profuels } from './Pages/profuels'
+import { Landing } from './Pages/Default/home';
+import { login } from './Pages/Default/login';
+import Profuels from './Pages/Profuels/main'
+import Estadocuentaprofuels from './Pages/Profuels/estadodecuenta'
+import Auxiliardemovimiento from './Pages/Profuels/auxiliardemovimiento'
 
 import {
     BrowserRouter as Router, Switch, Route
@@ -20,9 +22,12 @@ ReactDOM.render(
 
     <Router>
         <Switch>
-            <Route path='/' component={LoginForm} exact />
-            <Route path='/home' component={MainPage} exact />
+            <Route path='/' component={login} exact />
+            <Route path='/home' component={Landing} exact />
             <Route path='/profuels' component={Profuels} exact />
+            <Route path='/profuels/estadodecuenta' component={Estadocuentaprofuels} exact />
+            <Route path='/profuels/auxiliardemovimientos' component={Auxiliardemovimiento} exact />
+
         </Switch>
         <App />
     </Router>,

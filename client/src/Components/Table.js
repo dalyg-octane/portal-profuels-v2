@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import axios from 'axios'
 
 const useStyles = makeStyles({
@@ -80,7 +79,7 @@ export const DynamicTable = (props) => {
                         [_base64ToArrayBuffer(response.data)],
                         { type: 'application/xml' });
                     let url = window.URL.createObjectURL(file);
-                    //window.open(url);
+                    window.open(url);
                     let a = document.createElement('a');
                     a.href = url;
                     a.download = `${IdFact}.xml`;
@@ -91,8 +90,8 @@ export const DynamicTable = (props) => {
             alert(e);
         }
     }
-   
-    function RowDetail(props) {
+
+    const RowDetail = (props) => {
 
         const [open, setOpen] = React.useState(false);
         const { dataCol } = props;
@@ -112,7 +111,7 @@ export const DynamicTable = (props) => {
 
             <React.Fragment>
                 <TableRow key={dataRow.Número_de_factura} hover role='checkbox' tabIndex={-1} >
-                    <TableCell>
+                    <TableCell key={'icon' + dataRow.Número_de_factura}>
                         <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
                             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                         </IconButton>
@@ -125,7 +124,7 @@ export const DynamicTable = (props) => {
                             </TableCell>
                         );
                     })}
-                    <TableCell>
+                    <TableCell key={'iconFile' + dataRow.Número_de_factura}>
                         <IconButton aria-label="expand row" size="small" id={dataRow.Número_de_factura} onClick={(e) => {
                             downloadFile(dataRow.Número_de_factura);
                         }}>
@@ -198,7 +197,7 @@ export const DynamicTable = (props) => {
                                 </TableCell>
                             ))}
                             <TableCell
-                                style={{ minWidth: 170 }}
+                                key={'doc'} style={{ minWidth: 170 }}
                             >
                                 Documentos
                             </TableCell>
@@ -225,7 +224,7 @@ export const DynamicTable = (props) => {
         </Paper>
     );
 }
-export const NormalTable = (props) => {
+export const NormalTable = ({ data }) => {
 
     var rows = [];
     var columns = [];
@@ -242,33 +241,9 @@ export const NormalTable = (props) => {
         setPage(0);
     };
 
-    function downloadAcctFile(IdAcctSmnt) {
-        try {
-            axios.get(`https://portal.grupoeco.com.mx/sirexa/api/DownloadAcctFile?IdAcctSmnt=${IdAcctSmnt}`,
-                {
-                    method: 'GET',
-                }).then((response) => {
-                    const file = new Blob(
-                        [_base64ToArrayBuffer(response.data[0].File)],
-                        { type: 'application/pdf' });
-                    let url = window.URL.createObjectURL(file);
-                    //window.open(url);
-                    let a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${response.data[0].Id}`;
-                    a.click();
-                });
+    if (data.length) {
 
-        } catch (e) {
-            alert(e);
-        }
-    }
-
-    const { data } = props;
-
-    if (data.length > 0) {
-
-        columns = Object.keys(data[0]).map(function (key) {
+        columns = Object.keys(data[0]).map((key, index) => {
             return {
                 id: key,
                 label: key,
@@ -279,64 +254,91 @@ export const NormalTable = (props) => {
         rows = data;
     }
 
-    return (
-        <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label='sticky table'>
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                            <TableCell
-                                style={{ minWidth: 170 }}
-                            >
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                            return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                    {columns.map((column) => {
-                                        const value = row[column.id];
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                                {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </TableCell>
-                                        );
-                                    })}
-                                    <TableCell>
-                                        <IconButton aria-label="expand row" size="small" id={row.Id} onClick={(e) => {
-                                            downloadAcctFile(row.Id);
-                                        }}>
-                                            <PictureAsPdfIcon fontSize="large" style={{color:'red',fontSize: 31}}></PictureAsPdfIcon>
-                                        </IconButton>
+    if (data.length) {
+
+        return (
+            <Paper className={classes.root}>
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader aria-label='sticky table'>
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{ minWidth: column.minWidth }}
+                                    >
+                                        {column.label}
                                     </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component='div'
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-        </Paper>
-    )
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component='div'
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
+        )
 
+    } else {
+
+        return (
+
+            <Paper className={classes.root}>
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader aria-label='sticky table'>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell
+                                    style={{ minWidth: 170 }}
+                                >
+                                    Sin datos
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow hover role="checkbox">
+                                <TableCell
+                                    style={{ minWidth: 170 }}
+                                >
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component='div'
+                    count={10}
+                    rowsPerPage={10}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
+        )
+    }
 }
-
-

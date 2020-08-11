@@ -4,8 +4,6 @@ const path = require('path');
 const session = require('express-session');
 const Router = require('./Router')
 const dotenv = require('dotenv')
-const colors = require('colors')
-const morgan = require('morgan')
 
 dotenv.config({path: './config/config.env'})
 
@@ -29,9 +27,13 @@ App.use(session({
 
 new Router(App);
 
-App.get('*', function (req, res) {
-    //res.sendFile(path.join(__dirname, 'build', 'index.html'))
-    res.sendFile(path.join(__dirname, './client/build/index.html'))
+// App.get('/', function (req, res) {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'))
+//     //res.sendFile(path.join(__dirname, './client/build/index.html'))
+// });
+
+App.get('/', function (req, res) {
+	res.send('Express is working on IISNode!');
 });
 
-App.listen(PORT,console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold));
+App.listen(PORT,console.log(`Server is running in ${process.env.NODE_ENV} mode on port ${PORT}`));

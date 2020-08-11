@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button, LogoProfuelsFull } from './DynamicComponents'
-import UsrModel from '../Models/UsrCredentials'
+import { Button, LogoProfuelsFull } from '../../Components/DynamicComponents'
+import UsrModel from '../../Models/UsrCredentials'
 import TextField from '@material-ui/core/TextField';
 
-export class LoginForm extends React.Component {
+export class login extends React.Component {
 
     state = {
         Usr: '',

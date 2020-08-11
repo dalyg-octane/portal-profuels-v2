@@ -13,7 +13,7 @@ export const App = observer(() => {
     isLoggedin();
   }, []);
 
-  async function isLoggedin() {
+  const isLoggedin = async () => {
 
     try {
 
@@ -53,16 +53,18 @@ export const App = observer(() => {
   }
 
   if (UsrModel.isLoggedIn) {
+
     return (
       <Redirect to='/home'></Redirect>
     );
 
+
   } else {
+
     return (
-      <div>
-        <Redirect to='/'></Redirect>
-      </div>
+      <Redirect to='/'></Redirect>
     );
+
   }
 
 });

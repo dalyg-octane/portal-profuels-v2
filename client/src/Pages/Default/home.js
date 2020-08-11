@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { NavBar, HorizonNavBar } from '../Components/NavBar.js';
-import { Chart } from '../Components/Chart.js';
-import { LoginForm } from '../Components/LoginForm';
-import UsrModel from '../Models/UsrCredentials'
+import { NavBar, HorizonNavBar } from '../../Components/NavBar';
+import { Chart } from '../../Components/Chart.js';
+import UsrModel from '../../Models/UsrCredentials'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import $ from 'jquery';
@@ -13,10 +12,11 @@ var formatter = new Intl.NumberFormat('en-US', {
 });
 
 
-export const MainPage = () => {
+export const Landing = () => {
 
   const [dataRes, setData] = useState([]);
   const [valid, setValid] = useState(false);
+  
 
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export const MainPage = () => {
 
     return (
       <div>
-        <LoginForm></LoginForm>
+        <login></login>
       </div>
     );
   }
