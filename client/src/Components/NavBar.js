@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { UserLogo } from '../Components/DynamicComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faBell, faBars, faFire, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faBell, faFire, faHome } from '@fortawesome/free-solid-svg-icons'
 import UsrModel from '../Models/UsrCredentials'
-import { Badge } from '@material-ui/core'
+import { Badge, Typography, Breadcrumbs } from '@material-ui/core'
 import MailIcon from '@material-ui/icons/Mail'
 import { Link } from 'react-router-dom';
 
@@ -49,9 +49,17 @@ export const HorizonNavBar = () => {
         <nav id='hor-navBar' className='navbarHor'>
             <ul className='navbarHor-nav'>
                 <li className='navHor-item'>
-                    <FontAwesomeIcon icon={faBars} size={'lg'} className={'horIcon'} />
-                    <label className='boldText'>Dashboard</label>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link color="inherit" to='#'>
+                            Material-UI
+                        </Link>
+                        <Link color="inherit" to='#'>
+                            Core
+                        </Link>
+                        <Typography color="textPrimary">Breadcrumb</Typography>
+                    </Breadcrumbs>
                 </li>
+
                 <li className='navHor-item'>
                     <Badge badgeContent={10} color='secondary' className={'horIcon'}>
                         <MailIcon />
@@ -65,6 +73,76 @@ export const HorizonNavBar = () => {
     )
 }
 export const NavBar = ({ text }) => {
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        GetLinks();
+    }, []);
+
+    const GetLinks = async () => {
+
+        try {
+
+            var url = '/GetLinks'
+
+            let res = await fetch(url, {
+                method: 'post',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*'
+                },
+            });
+
+            let result = await res.json();
+
+            if (result && result.success) {
+
+                setData(result.data);
+            }
+
+        } catch (e) {
+
+            console.log(e);
+
+        }
+    }
+
+    const OpenLink = async (Llave) => {
+
+        try {
+
+            var url = '/ValidaLink'
+
+            let res = await fetch(url, {
+                method: 'post',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({
+                    Llave: Llave,
+                }),
+            });
+
+            let result = await res.json();
+
+            if (result && result.success) {
+                window.open(`${result.data[0].Link}`);
+
+                // let a = document.createElement('a');
+                // a.href = `${result.data[0].Link}`;
+                // a.click();
+            }
+
+        } catch (e) {
+
+            console.log(e);
+
+        }
+    }
 
     return (
         <React.Fragment>
@@ -82,26 +160,18 @@ export const NavBar = ({ text }) => {
                             </div>
                         </a>
                     </li>
-                    <li className='nav-item section-items'>
-                        <a href='/#' className='nav-link'>
-                            <span className='link-text'>Ventas</span>
-                        </a>
-                    </li>
-                    <li className='nav-item section-items'>
-                        <a href='/#' className='nav-link'>
-                            <span className='link-text'>Egresos</span>
-                        </a>
-                    </li>
-                    <li className='nav-item section-items'>
-                        <a href='/#' className='nav-link'>
-                            <span className='link-text'>Periféricos</span>
-                        </a>
-                    </li>
-                    <li className='nav-item section-items'>
-                        <a href='/#' className='nav-link'>
-                            <span className='link-text'>Otros reportes</span>
-                        </a>
-                    </li>
+                    <br></br>
+                    {data.map(e => {
+                        return (
+                            <li className='nav-item section-items'>
+                                <p id={e.Llave} className='nav-link' onClick={() => {
+                                    OpenLink(e.Llave);
+                                }}>
+                                    <span className='link-text'>{e.Nombre}</span>
+                                </p>
+                            </li>
+                        )
+                    })}
 
                     <li className='nav-item section-items'>
                         <a href='/#' className='nav-link' onClick={() => { doLogout() }}>

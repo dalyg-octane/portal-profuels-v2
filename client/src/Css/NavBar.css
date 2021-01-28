@@ -1,10 +1,10 @@
 .navbar {
   margin: 0;
-  padding: .5rem 0 .5rem 0;
-  width: 18.5rem;
+  padding: 1rem 0 .5rem 0;
+  width: 17rem;
   height: 100vh;
   position: fixed;
-  background-color: #161616;
+  background-color: #0F212E;
 }
 
 .navbarAnimation {
@@ -58,7 +58,7 @@
 
 .navbarHor {
   height: 4rem;
-  margin-left: 18.5rem;
+  margin-left: 17rem;
   background-color: white;
   border-bottom: solid 1px rgba(0, 0, 0, 0.1);
   
@@ -71,7 +71,7 @@
 
 .navbarHor-nav {
   list-style: none;
-  padding: 0 7.5rem 0 7.5rem;
+  padding: 0 5rem 0 5rem;
   margin: 0;
   display: flex;
   align-items: center;

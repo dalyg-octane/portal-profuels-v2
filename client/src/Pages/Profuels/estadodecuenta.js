@@ -12,10 +12,7 @@ const Estadocuentaprofuels = () => {
             <HorizonNavBar
             />
             <main>
-                <div style={{ margin: '0 8% 1% 8%' }}>
-                    <div className='row'>
-                        <label>Estado de cuenta</label>
-                    </div>
+                <div style={{ margin: '0 25% 1% 25%' }}>
                     <EdoCta />
                 </div>
             </main>

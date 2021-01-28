@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     XYPlot,
     makeWidthFlexible,
@@ -7,9 +7,8 @@ import {
     VerticalGridLines,
     HorizontalGridLines,
     Crosshair,
-    VerticalBarSeries
+    LineMarkSeries,
 } from 'react-vis';
-
 
 const initialState = '';
 const FlexibleXYPlot = makeWidthFlexible(XYPlot);
@@ -41,19 +40,20 @@ export const Chart = (props) => {
 
         return (
             <FlexibleXYPlot
-                margin={{ left: 80, right: 70, bottom: 100 }}
-                height={450}
+                margin={{ left: 80, right: 70, bottom: 70 }}
+                height={200}
                 xType={'ordinal'}
                 yDomain={[0, max]}
+
                 onMouseLeave={
                     resetForm
                 }
             >
                 <VerticalGridLines />
                 <HorizontalGridLines />
-                <VerticalBarSeries
+                <LineMarkSeries
                     opacity={0.6}
-                    color={'#00a5ee'}
+                    color={'forestgreen'}
                     data={chartData}
                     onNearestX={datapoint => {
                         setPoints(datapoint);
@@ -63,10 +63,10 @@ export const Chart = (props) => {
                     values={[points]}
                     className={'test-class-name'}
                     titleFormat={d => ({ title: 'Ventas', value: '' })}
-                    itemsFormat={d => [{ title: 'Litros', value: /*formatter.format(d[0].y) VENTAS EN MONTOS*/ d[0].y}, { title: 'Estación', value: d[0].x }]}
+                    itemsFormat={d => [{ title: 'Litros', value: d[0].y }, { title: 'Estación', value: d[0].x }]}
                 />
                 <XAxis color="#00a5ee"
-                    tickLabelAngle={-60}
+                    tickLabelAngle={0}
                 />
                 <YAxis
                     tickFormat={v => `${v} lts`}
@@ -78,7 +78,7 @@ export const Chart = (props) => {
 
         return (
             <div>
-                <h3>Sin información</h3>
+                <h4>Sin información</h4>
             </div>
         );
     }

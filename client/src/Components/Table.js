@@ -5,8 +5,11 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import axios from 'axios'
+import MUIDataTable from "mui-datatables";
+
 
 const useStyles = makeStyles({
     root: {
@@ -30,15 +33,67 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-export const DynamicTable = (props) => {
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+
+const downloadFile = async (Opc, IdFact) => {
+
+    try {
+
+        var url = '/DownloadInvoiceFile'
+
+        let res = await fetch(url, {
+            method: 'post',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify({
+                IdFact: IdFact,
+                Opc: Opc
+            }),
+        });
+
+        let result = await res.json();
+
+        if (result && result.success) {
+
+            const file = new Blob(
+                [_base64ToArrayBuffer(result.data[0].Data)],
+                { type: result.data[0].contentType });
+            let url = window.URL.createObjectURL(file);
+
+            if (Opc === 1) {
+                window.open(url);
+            } else {
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = `${result.data[0].IdDoc}`;
+                a.click();
+            }
+        }
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+}
+
+function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+}
+
+export const DynamicTable = ({ data }) => {
 
     var columns = [];
     var rows = [];
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const { data } = props;
-
     const classes = useStyles();
 
     if (data.length > 0) {
@@ -64,32 +119,6 @@ export const DynamicTable = (props) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
-
-    function replaceAll(string, search, replace) {
-        return string.split(search).join(replace);
-    }
-
-    function downloadFile(IdFact) {
-        try {
-            axios.get(`https://portal.grupoeco.com.mx/sirexa/api/DownloadFile?IdFact=${IdFact}`,
-                {
-                    method: 'GET',
-                }).then((response) => {
-                    const file = new Blob(
-                        [_base64ToArrayBuffer(response.data)],
-                        { type: 'application/xml' });
-                    let url = window.URL.createObjectURL(file);
-                    window.open(url);
-                    let a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${IdFact}.xml`;
-                    a.click();
-                });
-
-        } catch (e) {
-            alert(e);
-        }
-    }
 
     const RowDetail = (props) => {
 
@@ -125,11 +154,19 @@ export const DynamicTable = (props) => {
                         );
                     })}
                     <TableCell key={'iconFile' + dataRow.Número_de_factura}>
+
                         <IconButton aria-label="expand row" size="small" id={dataRow.Número_de_factura} onClick={(e) => {
-                            downloadFile(dataRow.Número_de_factura);
+                            downloadFile(0, dataRow.Número_de_factura);
                         }}>
-                            <AttachFileIcon ></AttachFileIcon>
+                            <DescriptionOutlinedIcon color={'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
                         </IconButton>
+
+                        <IconButton aria-label="expand row" size="small" id={dataRow.Número_de_factura} onClick={(e) => {
+                            downloadFile(1, dataRow.Número_de_factura);
+                        }}>
+                            <PictureAsPdfOutlinedIcon color={'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                        </IconButton>
+
                     </TableCell>
                 </TableRow>
                 <TableRow>
@@ -224,121 +261,61 @@ export const DynamicTable = (props) => {
         </Paper>
     );
 }
-export const NormalTable = ({ data }) => {
+export const NormalTable = ({ data, docsCol }) => {
 
-    var rows = [];
     var columns = [];
-    const classes = useStyles();
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    const columns1 = ["Sin información"];
+    const data1 = [[""]];
+    //{typeof value === 'number' ? formatter.format(value) : value}
 
     if (data.length) {
 
         columns = Object.keys(data[0]).map((key, index) => {
             return {
-                id: key,
-                label: key,
-                minWidth: 170
+                name: key,
+                label: replaceAll(key, '_', ' '),
             }
         });
 
-        rows = data;
+        if (docsCol) {
+
+            columns.push(
+                {
+                    name: 'keyDoc',
+                    label: 'Documentos',
+                    options: {
+                        customBodyRender: (value, tableMeta, updateValue) => (
+                            <>
+                                <IconButton aria-label="expand row" size="small" id={tableMeta.rowData[0]} onClick={(e) => {
+                                    downloadFile(0, tableMeta.rowData[0]);
+                                }}>
+                                    <DescriptionOutlinedIcon color={'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
+                                </IconButton>
+
+                                <IconButton aria-label="expand row" size="small" id={tableMeta.rowData[0]} onClick={(e) => {
+                                    downloadFile(1, tableMeta.rowData[0]);
+                                }}>
+                                    <PictureAsPdfOutlinedIcon color={'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                                </IconButton>
+                            </>
+
+                        )
+                    }
+                }
+            );
+
+        }
     }
 
-    if (data.length) {
 
-        return (
-            <Paper className={classes.root}>
-                <TableContainer className={classes.container}>
-                    <Table stickyHeader aria-label='sticky table'>
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{ minWidth: column.minWidth }}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column) => {
-                                            const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component='div'
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </Paper>
-        )
-
-    } else {
-
-        return (
-
-            <Paper className={classes.root}>
-                <TableContainer className={classes.container}>
-                    <Table stickyHeader aria-label='sticky table'>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell
-                                    style={{ minWidth: 170 }}
-                                >
-                                    Sin datos
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow hover role="checkbox">
-                                <TableCell
-                                    style={{ minWidth: 170 }}
-                                >
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component='div'
-                    count={10}
-                    rowsPerPage={10}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                />
-            </Paper>
-        )
-    }
+    return (
+        <MUIDataTable
+            title={"Estaciones"}
+            data={data.length ? data : data1}
+            columns={columns.length ? columns : columns1}
+            options={{
+                selectableRows: false
+            }}
+        />
+    )
 }

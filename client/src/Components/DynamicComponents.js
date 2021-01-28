@@ -1,18 +1,59 @@
-import React from 'react'
-import UserImg from '../Images/userImg.jpg'
+import React, { useEffect, useState } from 'react'
+import UserImg2 from '../Images/userImg2.png'
 import CmpnyLogo from '../Images/cmpnyLogo.png'
 import LogoFull from '../Images/Logo Profuels flama 1.jpg'
+import GasArco from '../Images/ARCO.png'
+import GasPemex from '../Images/pemex.png'
+import GasUnbranded from '../Images/unbranded.png'
 import ProfuelsFlamesImg from '../Images/Flamas.png'
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import moment from "moment";
+import axios from 'axios'
+export class Arco extends React.Component {
 
+    render() {
+        return (
+            <img
+                className={this.props.className}
+                src={GasArco}
+                alt='logo'
+            />
+        )
+    }
+}
+
+export class Pemex extends React.Component {
+
+    render() {
+        return (
+            <img
+                className={this.props.className}
+                src={GasPemex}
+                alt='logo'
+            />
+        )
+    }
+}
+
+export class Unbranded extends React.Component {
+
+    render() {
+        return (
+            <img
+                className={this.props.className}
+                src={GasUnbranded}
+                alt='logo'
+            />
+        )
+    }
+}
 export class UserLogo extends React.Component {
 
     render() {
         return (
             <img
                 className={this.props.className}
-                src={UserImg}
+                src={UserImg2}
                 alt='logo'
             />
         )
@@ -72,7 +113,7 @@ export class Button extends React.Component {
 }
 
 function _base64ToArrayBuffer(base64) {
-    
+
     var binary_string = window.atob(base64);
     var len = binary_string.length;
     var bytes = new Uint8Array(len);
@@ -84,8 +125,19 @@ function _base64ToArrayBuffer(base64) {
 
 export const EdoCta = () => {
 
-    var meses = [1, 2, 3, 4, 5, 6,7/*, 8, 9, 10, 11, 12*/];
-    var currentYear = new Date().getFullYear()
+    const [meses, setMeses] = useState([]);
+    let currentYear = new Date().getFullYear();
+
+    useEffect(() => {
+        generateMonths();
+    }, []);
+
+    const generateMonths = async () => {
+
+        const { data } = await axios.post(`/GetMonthsAcct`, {});
+        setMeses(data.fecha);
+
+    };
 
     const getAcctSmnt = async (fechaCorte, IdCIa) => {
 
@@ -118,11 +170,11 @@ export const EdoCta = () => {
                     [_base64ToArrayBuffer(jsonRes[0].File)],
                     { type: 'application/pdf' });
                 let url = window.URL.createObjectURL(file);
-                window.open(url);
-                // let a = document.createElement('a');
-                // a.href = url;
-                // a.download = `${jsonRes[0].Id}`;
-                // a.click();
+                //window.open(url);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = `${jsonRes[0].Id}`;
+                a.click();
             }
 
         } catch (e) {
@@ -136,19 +188,17 @@ export const EdoCta = () => {
         meses.map(m => {
             return (
                 <React.Fragment>
-                    <div className="row" style={{ backgroundColor: 'white', padding: '1rem', height: '6rem' }}>
-                        <div className="col-md-2">
-                            <label>{moment(m, 'MM').format('MMMM')} {new Date(currentYear, m - 1 + 1, 0).toISOString().substring(0, 10)}</label>
+                    <div className="row" style={{ backgroundColor: 'white', padding: '1rem', height: '6rem', marginBottom: '1%' }}>
+                        <div className="col-md-4">
+                            <label>{moment(m.m, 'MM').format('MMMM')} <label style={{fontWeight:'bold'}}>{new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)}</label></label>
                         </div>
-                        <div className="col-md-10" style={{ textAlign: 'right' }}>
+                        <div className="col-md-8" style={{ textAlign: 'right' }}>
                             <PictureAsPdfOutlinedIcon className='hover-icon' fontSize="large" style={{ color: 'red', fontSize: 31 }} onClick={(e) => {
                                 e.preventDefault();
-                                getAcctSmnt((new Date(currentYear, m - 1 + 1, 0).toISOString().substring(0, 10)), 'P8301');
-
+                                getAcctSmnt((new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)), 'P8301');
                             }} />
                         </div>
                     </div>
-                    <br></br>
                 </React.Fragment>
             )
         })

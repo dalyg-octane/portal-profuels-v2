@@ -4,7 +4,6 @@ import './Css/Logos.css';
 import './Css/NavBar.css';
 import './Css/KeyFrames.css';
 import 'react-vis/dist/style.css';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { App } from './App';
@@ -13,24 +12,30 @@ import { login } from './Pages/Default/login';
 import Profuels from './Pages/Profuels/main'
 import Estadocuentaprofuels from './Pages/Profuels/estadodecuenta'
 import Auxiliardemovimiento from './Pages/Profuels/auxiliardemovimiento'
+import AntiguedadDeSaldos from './Pages/Profuels/antiguedaddesaldos'
+import Informedesaldos from './Pages/Profuels/informedesaldos'
+
 
 import {
-    BrowserRouter as Router, Switch, Route
+    BrowserRouter as Router, Switch, Route, HashRouter
 } from "react-router-dom";
 
 ReactDOM.render(
 
     <Router>
         <Switch>
-            <Route path='/' component={login} exact />
-            <Route path='/home' component={Landing} exact />
-            <Route path='/profuels' component={Profuels} exact />
-            <Route path='/profuels/estadodecuenta' component={Estadocuentaprofuels} exact />
-            <Route path='/profuels/auxiliardemovimientos' component={Auxiliardemovimiento} exact />
+            <Route path={`/`} component={login} exact />
+            <Route path={`/home`} component={Landing} exact />
+            <Route path={`/profuels`} component={Profuels} exact />
+            <Route path={`/profuels/estadodecuenta`} component={Estadocuentaprofuels} exact />
+            <Route path={`/profuels/auxiliardemovimientos`} component={Auxiliardemovimiento} exact />
+            <Route path={`/profuels/antiguedaddesaldos`} component={AntiguedadDeSaldos} exact />
+            <Route path={`/profuels/informedesaldos`} component={Informedesaldos} exact />
 
         </Switch>
-        <App />
-    </Router>,
+        <App></App>
+   </Router>  
+    ,
     document.getElementById('root')
 
 );

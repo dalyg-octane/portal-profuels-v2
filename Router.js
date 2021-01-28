@@ -1,4 +1,6 @@
 var Request = require("request");
+//var url = 'http://localhost:8000/api'
+var url = 'https://portal.grupoeco.com.mx/sirexa/api'
 
 class Router {
 
@@ -12,20 +14,65 @@ class Router {
         this.downloadFile(App);
         this.downloafAcctFile(App);
         this.getTransactions(App);
+        this.GetAntiguedad(App);
+        this.GetEstaciones(App);
+        this.GetInformes(App);
+        this.GetPrecios(App);
+        this.GetLinksByUserLlave(App);
+        this.ValidaLink(App);
+        this.DownloadInvoiceFile(App);
+        this.GetInventariosByUserKey(App);
+        this.GetMonthsAcct(App);
+
     }
 
-    getTransactions(App) {
+    GetMonthsAcct(App) {
 
-        App.post('/getTransactions', (req, res) => {
+        App.post('/GetMonthsAcct', (req, res) => {
 
             try {
+
+                var date = new Date();
+                var fechas = [];
+                var ma = {};
+
+                for (var i = 1; i <= 6; i++) {
+
+                var newDate = new Date(date.setMonth(date.getMonth() - 1));
+                ma = { a: newDate.getFullYear(), m: (newDate.getMonth() + 1) }
                 
+                fechas.push(ma);
+                
+                }
+
+                res.json({
+                    success: true,
+                    fecha: fechas,
+                });
+
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    GetInventariosByUserKey(App) {
+
+        App.post('/GetInventariosByUserKey', (req, res) => {
+
+            try {
+
                 const u = req.session.User;
 
                 Request.get({
                     "headers": { "content-type": "application/json" },
-                    //"url": "https://portal.grupoeco.com.mx/sirexa/api/DownloadFile?IdFact=" + req.body.IdFact + "", //// Produccion
-                    "url": `http://localhost:8000/api/GetTransactions/?fechaInicial=${req.body.fechaInicial}&fechaFinal=${req.body.fechaFinal}`, //// Pruebas
+                    "url": `${url}/GetInventariosByUserKey?opc=${req.body.opc}`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 
@@ -39,9 +86,455 @@ class Router {
                         return false;
 
                     }
-                    const apiRes = JSON.parse(body);
 
-                    if (apiRes) {
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    DownloadInvoiceFile(App) {
+
+
+        App.post('/DownloadInvoiceFile', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/DownloadFile?Opc=${req.body.Opc}&IdFact=${req.body.IdFact}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+                        res.json({
+                            msg: error,
+                            success: false
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    ValidaLink(App) {
+
+        App.post('/ValidaLink', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/ValidaLink?Llave=${req.body.Llave}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    GetLinksByUserLlave(App) {
+
+        App.post('/GetLinks', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetLinksByUsrLlave`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    GetPrecios(App) {
+
+        App.post('/GetPrecios', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetPrecios`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+    GetInformes(App) {
+
+        App.post('/GetInformes', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.post({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetInformeSaldos/?FechaCorte=${req.body.Mes}&IdSitio=${req.body.Est}&Currency=${'MXN'}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+
+
+    GetEstaciones(App) {
+
+        App.post('/GetEstaciones', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.post({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetEstaciones/?Opc=${4}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+
+    GetAntiguedad(App) {
+
+        App.post('/GetAntiguedad', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.post({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetAntiguedad/`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
+
+    getTransactions(App) {
+
+        App.post('/getTransactions', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetTransactions/?fechaInicial=${req.body.fechaInicial}&fechaFinal=${req.body.fechaFinal}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
 
                         res.json({
                             success: true,
@@ -74,13 +567,12 @@ class Router {
         App.post('/downloadAcctSmt', (req, res) => {
 
             try {
-                
+
                 const u = req.session.User;
 
                 Request.get({
                     "headers": { "content-type": "application/json" },
-                    //"url": "https://portal.grupoeco.com.mx/sirexa/api/DownloadFile?IdFact=" + req.body.IdFact + "", //// Produccion
-                    "url": `http://localhost:8000/api/DownloadAcctFile/?fechaCorte=${req.body.Fecha}&IdCia=${req.body.IdCia}`, //// Pruebas
+                    "url": `${url}/DownloadAcctFile/?fechaCorte=${req.body.Fecha}&IdCia=${req.body.IdCia}`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 
@@ -132,8 +624,7 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                    //"url": "https://portal.grupoeco.com.mx/sirexa/api/DownloadFile?IdFact=" + req.body.IdFact + "", //// Produccion
-                    "url": "http://localhost:8000/api/DownloadFile?IdFact=" + req.body.IdFact + "", //// Pruebas
+                    "url": `${url}/DownloadFile?IdFact=${req.body.IdFact}`,
                 }, (error, response, body) => {
 
                     if (error) {
@@ -188,8 +679,7 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                    //"url": "https://portal.grupoeco.com.mx/sirexa/api/GetSaldos/?Opc=2", //// Produccion
-                    "url": "http://localhost:8000/api/GetSaldos/?Opc=2",
+                    "url": `${url}/GetSaldos/?Opc=2`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 
@@ -244,8 +734,7 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                    //"url": "https://portal.grupoeco.com.mx/sirexa/api/GetSalesInfo", //// Produccion
-                    "url": "http://localhost:8000/api/GetSalesInfo/",
+                    "url": `${url}/GetSalesInfo/`,
                     body: JSON.stringify(u),
                 }, (error, body) => {
 
@@ -298,11 +787,11 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                     //"url": "https://portal.grupoeco.com.mx/sirexa/api/VAcceso", //// Produccion
-                     "url": "http://localhost:8000/api/VAcceso", //// Pruebas
+                    "url": `${url}/vAcceso`,
                     body: JSON.stringify({
                         Usr: req.body.Usr,
-                        Pwd: req.body.Pwd
+                        Pwd: req.body.Pwd,
+                        IdLink: '8045A0AA-AD43-42AA-811F-AC0C42BA00EE',
                     }),
                 }, (error, response, body) => {
 

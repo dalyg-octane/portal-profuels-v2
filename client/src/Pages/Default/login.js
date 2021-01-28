@@ -83,7 +83,7 @@ export class login extends React.Component {
         });
 
         val = val.trim();
-        if (val.length > 12) {
+        if (val.length > 50) {
             return;
         }
         this.setState({
@@ -93,7 +93,7 @@ export class login extends React.Component {
 
     render() {
 
-        document.body.style.backgroundColor = '#161616';
+        document.body.style.backgroundColor = '#0F212E';
 
         return (
 
