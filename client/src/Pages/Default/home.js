@@ -142,20 +142,20 @@ export const Landing = () => {
             </div>
           </div>
           <br />
-          {/* <div className="flex-container">
+          <div className="flex-container">
             <div className="flex-item">
-              <h6 className="custom-h6">Gráfica de ventas a un día vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date).toISOString().substring(0, 10)}</h6>
+              <h6 className="custom-h6">Informaciónde inventarios en tanques 6:00am</h6>
               <br />
               <TankChart></TankChart>
             </div>
-          </div> */}
-          <div className="flex-container">
+          </div>
+          {/* <div className="flex-container">
             <div className="flex-item">
               <h6 className="custom-h6">Gráfica de ventas a un día vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date).toISOString().substring(0, 10)}</h6>
               <br />
               <Chart data={dataRes} success={valid} />
             </div>
-          </div>
+          </div> */}
           <br />
           <GasPriceElement data={dataPrecios} />
           <a id="hoverUp" href="/#"><FontAwesomeIcon icon={faChevronUp} /></a>

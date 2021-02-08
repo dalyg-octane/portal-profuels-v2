@@ -9,7 +9,7 @@ export const TankChart = () => {
     const [dataSet, setData] = useState([]);
 
     const GetTanques = async () => {
-        const { data } = await axios.post(`/GetAcctStmtMonths`, { opc: 1 });
+        const { data } = await axios.post(`/GetInventariosByUserKey`, { opc: 1 });
         setData(data.data);
         console.log(data.data)
     }
@@ -24,13 +24,15 @@ export const TankChart = () => {
                 {dataSet.map(elm => {
                     return (
                         <RadialChart
-                            data={[{ angle: elm.Porcentaje, color: elm.Color }, { angle: elm.Total, color: '#F8F8F8' }]}
+                            data={[{ angle: elm.Porcentaje, color: elm.Color, label: `${elm.Porcentaje}%` }, { angle: elm.Total, color: '#F8F8F8'}]}
                             width={260}
-                            height={260}
+                            height={240}
                             innerRadius={65}
                             radius={110}
                             colorType="literal"
-                        // showLabels
+                            labelsRadiusMultiplier={0.98}
+                            labelsStyle={{fontSize: 12, fill: 'white'}}
+                            showLabels
                         />
                     )
                 })}
