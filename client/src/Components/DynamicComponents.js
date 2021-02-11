@@ -126,7 +126,6 @@ function _base64ToArrayBuffer(base64) {
 export const EdoCta = () => {
 
     const [meses, setMeses] = useState([]);
-    let currentYear = new Date().getFullYear();
 
     useEffect(() => {
         generateMonths();

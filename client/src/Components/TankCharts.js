@@ -11,7 +11,6 @@ export const TankChart = () => {
     const GetTanques = async () => {
         const { data } = await axios.post(`/GetInventariosByUserKey`, { opc: 1 });
         setData(data.data);
-        console.log(data.data)
     }
 
     useEffect(() => {

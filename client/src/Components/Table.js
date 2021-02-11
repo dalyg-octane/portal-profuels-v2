@@ -32,11 +32,6 @@ function _base64ToArrayBuffer(base64) {
     return bytes.buffer;
 }
 
-var formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
-
 const downloadFile = async (Opc, IdFact) => {
 
     try {

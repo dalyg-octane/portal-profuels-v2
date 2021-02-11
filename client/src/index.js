@@ -17,7 +17,7 @@ import Informedesaldos from './Pages/Profuels/informedesaldos'
 
 
 import {
-    BrowserRouter as Router, Switch, Route, HashRouter
+    BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
 
 ReactDOM.render(
