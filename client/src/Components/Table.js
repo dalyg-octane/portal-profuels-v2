@@ -7,7 +7,6 @@ import Box from '@material-ui/core/Box';
 import Collapse from '@material-ui/core/Collapse';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
-import axios from 'axios'
 import MUIDataTable from "mui-datatables";
 
 
@@ -266,7 +265,7 @@ export const NormalTable = ({ data, docsCol }) => {
     var columns = [];
     const columns1 = ["Sin información"];
     const data1 = [[""]];
-    //{typeof value === 'number' ? formatter.format(value) : value}
+    // {typeof value === 'number' ? formatter.format(value) : value}
 
     if (data.length) {
 
