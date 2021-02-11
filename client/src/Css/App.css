@@ -233,6 +233,12 @@ button:disabled {
   width: 200px;
   height: 200px;
 }
+
+.custom-form-control
+{
+  width: 50% !important;
+}
+
 .gas-container {
   display: flex;
   justify-content: space-between;

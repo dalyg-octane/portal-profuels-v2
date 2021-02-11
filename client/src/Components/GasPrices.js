@@ -5,16 +5,19 @@ import { Arco, Pemex, Unbranded } from '../Components/DynamicComponents'
 
 const GasPriceElement = ({ data }) => {
 
-    const group = data.reduce((acc, item) => {
-        if (!acc[item['Número de estación']]) {
-            acc[item['Número de estación']] = [];
-        }
+    var group = "";
 
-        acc[item['Número de estación']].push(item);
-        return acc;
+    if (data.length !== 0) {
+        group = data.reduce((acc, item) => {
+            if (!acc[item['Número de estación']]) {
+                acc[item['Número de estación']] = [];
+            }
 
-    }, {})
+            acc[item['Número de estación']].push(item);
+            return acc;
 
+        }, {})
+    }
 
     return (
 

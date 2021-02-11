@@ -1,6 +1,7 @@
+const { response } = require("express");
 var Request = require("request");
-var url = 'http://localhost:8000/api'
-//var url = 'https://portal.grupoeco.com.mx/sirexa/api'
+//var url = 'http://localhost:8000/api'
+var url = 'https://portal.grupoeco.com.mx/sirexa/api'
 
 class Router {
 
@@ -38,11 +39,11 @@ class Router {
 
                 for (var i = 1; i <= 6; i++) {
 
-                var newDate = new Date(date.setMonth(date.getMonth() - 1));
-                ma = { a: newDate.getFullYear(), m: (newDate.getMonth() + 1) }
-                
-                fechas.push(ma);
-                
+                    var newDate = new Date(date.setMonth(date.getMonth() - 1));
+                    ma = { a: newDate.getFullYear(), m: (newDate.getMonth() + 1) }
+
+                    fechas.push(ma);
+
                 }
 
                 res.json({
@@ -285,11 +286,17 @@ class Router {
 
     GetPrecios(App) {
 
-        App.post('/GetPrecios', (req, res) => {
+        App.post('/GetPrecios/:t', (req, res) => {
 
             try {
 
-                const u = req.session.User;
+                const l = req.session.User.Llave; // "Llave": "B1085BB4-694F-4E12-B217-499DB26D8C34" (para pruebas),
+                const t = req.params.t; // "Tipo": req.params.t (para pruebas)
+
+                const u = {
+                    "Llave": l,
+                    "Tipo": t
+                }
 
                 Request.get({
                     "headers": { "content-type": "application/json" },
