@@ -10,15 +10,14 @@ import {
     LineMarkSeries,
 } from 'react-vis';
 
-const initialState = '';
 const FlexibleXYPlot = makeWidthFlexible(XYPlot);
 
 export const Chart = (props) => {
 
-    const [points, setPoints] = useState(initialState);
+    const [points, setPoints] = useState('');
 
     const resetForm = () => {
-        setPoints(initialState);
+        setPoints();
     }
 
     const jsonRes = props.data;

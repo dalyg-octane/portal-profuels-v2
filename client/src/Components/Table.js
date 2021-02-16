@@ -8,77 +8,30 @@ import Collapse from '@material-ui/core/Collapse';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import MUIDataTable from "mui-datatables";
-
-
-const useStyles = makeStyles({
-    root: {
-        width: '100%',
-    },
-    container: {
-        maxHeight: 440,
-    },
-    table: {
-        minWidth: 650,
-    },
-});
-
-function _base64ToArrayBuffer(base64) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-        bytes[i] = binary_string.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
+import axios from 'axios';
 
 const downloadFile = async (Opc, IdFact) => {
 
     try {
-
-        var url = '/DownloadInvoiceFile'
-
-        let res = await fetch(url, {
-            method: 'post',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify({
-                IdFact: IdFact,
-                Opc: Opc
-            }),
-        });
-
-        let result = await res.json();
-
-        if (result && result.success) {
-
+        const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+        if (data && data.success) {
             const file = new Blob(
-                [_base64ToArrayBuffer(result.data[0].Data)],
-                { type: result.data[0].contentType });
+                [_base64ToArrayBuffer(data.data[0].Data)],
+                { type: data.data[0].contentType });
             let url = window.URL.createObjectURL(file);
-
             if (Opc === 1) {
                 window.open(url);
             } else {
                 let a = document.createElement('a');
                 a.href = url;
-                a.download = `${result.data[0].IdDoc}`;
+                a.download = `${data.data[0].IdDoc}`;
                 a.click();
             }
         }
-
     } catch (e) {
-
         console.log(e);
-
     }
-}
 
-function replaceAll(string, search, replace) {
-    return string.split(search).join(replace);
 }
 
 export const DynamicTable = ({ data }) => {
@@ -131,7 +84,6 @@ export const DynamicTable = ({ data }) => {
         });
 
         return (
-
             <React.Fragment>
                 <TableRow key={dataRow.Número_de_factura} hover role='checkbox' tabIndex={-1} >
                     <TableCell key={'icon' + dataRow.Número_de_factura}>
@@ -260,7 +212,6 @@ export const NormalTable = ({ data, docsCol }) => {
     var columns = [];
     const columns1 = ["Sin información"];
     const data1 = [[""]];
-    // {typeof value === 'number' ? formatter.format(value) : value}
 
     if (data.length) {
 
@@ -301,7 +252,6 @@ export const NormalTable = ({ data, docsCol }) => {
         }
     }
 
-
     return (
         <MUIDataTable
             title={"Estaciones"}
@@ -313,3 +263,28 @@ export const NormalTable = ({ data, docsCol }) => {
         />
     )
 }
+function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+        bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
+function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
+}
+
+const useStyles = makeStyles({
+    root: {
+        width: '100%',
+    },
+    container: {
+        maxHeight: 440,
+    },
+    table: {
+        minWidth: 650,
+    },
+});

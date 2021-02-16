@@ -12,7 +12,6 @@ const GasPriceElement = ({ data }) => {
             if (!acc[item['Número de estación']]) {
                 acc[item['Número de estación']] = [];
             }
-
             acc[item['Número de estación']].push(item);
             return acc;
 

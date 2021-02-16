@@ -15,8 +15,6 @@ import Estadocuentaprofuels from './Pages/Profuels/estadodecuenta'
 import Auxiliardemovimiento from './Pages/Profuels/auxiliardemovimiento'
 import AntiguedadDeSaldos from './Pages/Profuels/antiguedaddesaldos'
 import Informedesaldos from './Pages/Profuels/informedesaldos'
-
-
 import {
     BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
@@ -32,7 +30,6 @@ ReactDOM.render(
             <Route path={`/profuels/auxiliardemovimientos`} component={Auxiliardemovimiento} exact />
             <Route path={`/profuels/antiguedaddesaldos`} component={AntiguedadDeSaldos} exact />
             <Route path={`/profuels/informedesaldos`} component={Informedesaldos} exact />
-
         </Switch>
         <App></App>
    </Router>  

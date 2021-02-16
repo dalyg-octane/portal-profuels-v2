@@ -3,47 +3,40 @@ import UsrModel from '../../Models/UsrCredentials'
 import { NavBar, HorizonNavBar } from '../../Components/NavBar';
 import JsonToSelect from '../../Components/JsonToSelect'
 import { NormalTable } from '../../Components/Table';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 
+import axios from 'axios'
 
 const Informedesaldos = () => {
 
     const [data, setData] = useState([]);
     const [dataMes, setDataMes] = useState([]);
     const [dataTable, setDataTbl] = useState([]);
+    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         estacionesList();
     }, []);
 
+    const handleClose = (r) => {
+        if (r === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     const estacionesList = async () => {
 
         try {
-
-            var url = '/GetEstaciones'
-
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*'
-                },
-            });
-
-
-            let result = await res.json();
-
-            if (result && result.success) {
-
-                setData(result.data);
-                setDataMes(months);
-            }
+            const { data } = await axios.post('/GetEstaciones', {});
+            setData(data.data);
+            setDataMes(months);
 
         } catch (e) {
-
             console.log(e);
-
         }
+
     }
 
     const consultaInforme = async (idElm) => {
@@ -54,43 +47,20 @@ const Informedesaldos = () => {
         if (selMes !== '' & selEst !== '') {
 
             try {
-
-                var url = '/GetInformes'
-
-                let res = await fetch(url, {
-                    method: 'post',
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        'Access-Control-Allow-Origin': '*'
-                    },
-                    body: JSON.stringify({
-                        Est: selEst,
-                        Mes: selMes
-                    }),
-                });
-
-
-                let result = await res.json();
-
-                if (result && result.success) {
-
-                    setDataTbl(result.data);
-
-                }
-
+                const { data } = await axios.post('/GetInformes', { Est: selEst, Mes: selMes });
+                setDataTbl(data.data);
             } catch (e) {
-
                 console.log(e);
-
             }
-
-
-
         } else {
-            //alert('con vacios')
+            return (
+                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                    <Alert onClose={handleClose} severity="warning">
+                        Seleccione los filtros
+                </Alert>
+                </Snackbar>
+            )
         }
-
     }
 
     return (

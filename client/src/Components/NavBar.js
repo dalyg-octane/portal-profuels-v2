@@ -6,40 +6,21 @@ import UsrModel from '../Models/UsrCredentials'
 import { Badge, Typography, Breadcrumbs } from '@material-ui/core'
 import MailIcon from '@material-ui/icons/Mail'
 import { Link } from 'react-router-dom';
+import axios from 'axios'
 
 const doLogout = async () => {
 
     try {
-
-        var url = '/logout'
-
-        let res = await fetch(url, {
-            method: 'post',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-        });
-
-        let result = await res.json();
-
-        if (result && result.success) {
-
+        const { data } = await axios.post('/logout', {});
+        if (data && data.success) {
             UsrModel.isLoggedIn = false;
             UsrModel.userName = '';
-
         } else {
-
             UsrModel.isLoggedIn = false;
             UsrModel.userName = '';
-
         }
-
     } catch (e) {
-
         console.log(e);
-
     }
 
 }
@@ -83,65 +64,25 @@ export const NavBar = ({ text }) => {
     const GetLinks = async () => {
 
         try {
-
-            var url = '/GetLinks'
-
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*'
-                },
-            });
-
-            let result = await res.json();
-
-            if (result && result.success) {
-
-                setData(result.data);
-            }
+            const { data } = await axios.post('/GetLinks', {});
+            setData(data.data);
 
         } catch (e) {
-
             console.log(e);
-
         }
+        
     }
 
     const OpenLink = async (Llave) => {
 
         try {
-
-            var url = '/ValidaLink'
-
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*'
-                },
-                body: JSON.stringify({
-                    Llave: Llave,
-                }),
-            });
-
-            let result = await res.json();
-
-            if (result && result.success) {
-                window.open(`${result.data[0].Link}`);
-
-                // let a = document.createElement('a');
-                // a.href = `${result.data[0].Link}`;
-                // a.click();
-            }
+            const { data } = await axios.post('/ValidaLink', { Llave: Llave });
+            window.open(`${data.data[0].Link}`);
 
         } catch (e) {
-
             console.log(e);
-
         }
+
     }
 
     return (

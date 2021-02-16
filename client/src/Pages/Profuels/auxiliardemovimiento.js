@@ -7,6 +7,8 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
+import axios from 'axios'
+
 
 const Auxiliardemovimiento = () => {
 
@@ -15,12 +17,10 @@ const Auxiliardemovimiento = () => {
     const [open, setOpen] = React.useState(false);
 
     const handleClose = (r) => {
-
         if (r === 'clickaway') {
             return;
         }
         setOpen(false);
-
     };
 
     const consultaMov = async () => {
@@ -29,16 +29,13 @@ const Auxiliardemovimiento = () => {
         const fechaFinal = document.getElementById('dateFinal').value;
 
         if (fechaFinal >= fechaInicio) {
-
             try {
-
                 const { data } = await axios.post('/getTransactions', { fechaInicial: fechaInicio, fechaFinal: fechaFinal });
                 setData(data.data);
 
             } catch (e) {
                 console.log(e);
             }
-
         } else {
             setOpen(true);
         }

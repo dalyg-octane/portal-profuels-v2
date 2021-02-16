@@ -7,7 +7,7 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@material-ui/core/';
 import { Link } from 'react-router-dom';
 import ScrollTop from '../../Components/CommonFunctions/ScrollTop'
-
+import axios from 'axios'
 
 var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -23,11 +23,8 @@ export const Profuels = () => {
     useEffect(() => {
 
         let mounted = true
-
         getSaldos(mounted);
-
         ScrollTop();
-
         return function cleanup() {
             mounted = false
         }
@@ -37,37 +34,13 @@ export const Profuels = () => {
     const getSaldos = async (mounted) => {
 
         try {
-            var url = '/GetSaldos'
             if (mounted) {
-
-
-                let res = await fetch(url, {
-                    method: 'post',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    }
-                });
-
-                let result = await res.json();
-
-
-                if (result && result.success) {
-
-                    setData(result.data);
-
-                    return;
-
-                }
-
+                const { data } = await axios.post('/GetSaldos', {});
+                setData(data.data);
             }
 
-
         } catch (err) {
-
             console.log(err);
-
         }
 
     }

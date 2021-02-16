@@ -141,46 +141,20 @@ export const EdoCta = () => {
     const getAcctSmnt = async (fechaCorte, IdCIa) => {
 
         try {
-
-            var url = '/downloadAcctSmt'
-
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*'
-                },
-                body: JSON.stringify({
-                    Fecha: fechaCorte,
-                    IdCia: IdCIa
-                }),
-            });
-
-
-            let result = await res.json();
-
-
-            if (result && result.success) {
-
-                var jsonRes = JSON.parse(JSON.parse(JSON.parse(result.data)));
-
-                const file = new Blob(
-                    [_base64ToArrayBuffer(jsonRes[0].File)],
-                    { type: 'application/pdf' });
-                let url = window.URL.createObjectURL(file);
-                //window.open(url);
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = `${jsonRes[0].Id}`;
-                a.click();
-            }
-
+            const { data } = await axios.post('/downloadAcctSmt', { Fecha: fechaCorte, IdCia: IdCIa });
+            var jsonRes = JSON.parse(JSON.parse(JSON.parse(data.data)));
+            const file = new Blob(
+                [_base64ToArrayBuffer(jsonRes[0].File)],
+                { type: 'application/pdf' });
+            let url = window.URL.createObjectURL(file);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = `${jsonRes[0].Id}`;
+            a.click();
         } catch (e) {
-
             console.log(e);
-
         }
+
     }
 
     return (
@@ -189,7 +163,7 @@ export const EdoCta = () => {
                 <React.Fragment>
                     <div className="row" style={{ backgroundColor: 'white', padding: '1rem', height: '6rem', marginBottom: '1%' }}>
                         <div className="col-md-4">
-                            <label>{moment(m.m, 'MM').format('MMMM')} <label style={{fontWeight:'bold'}}>{new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)}</label></label>
+                            <label>{moment(m.m, 'MM').format('MMMM')} <label style={{ fontWeight: 'bold' }}>{new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)}</label></label>
                         </div>
                         <div className="col-md-8" style={{ textAlign: 'right' }}>
                             <PictureAsPdfOutlinedIcon className='hover-icon' fontSize="large" style={{ color: 'red', fontSize: 31 }} onClick={(e) => {

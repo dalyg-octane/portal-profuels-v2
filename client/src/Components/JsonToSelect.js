@@ -3,24 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-// import MenuItem from '@material-ui/core/MenuItem';
-
-
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: '100%',
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
-
-var currentYear = new Date().getFullYear()
-
 
 const JsonToSelect = ({ data, label, func }) => {
-
+    
+    var currentYear = new Date().getFullYear()
     const classes = useStyles();
     const [dataSel, setData] = React.useState('');
 
@@ -55,5 +41,14 @@ const JsonToSelect = ({ data, label, func }) => {
         </div>
     )
 }
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: '100%',
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}));
 
 export default JsonToSelect

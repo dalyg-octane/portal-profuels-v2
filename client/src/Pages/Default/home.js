@@ -10,14 +10,6 @@ import { TankChart } from '../../Components/TankCharts';
 import Radio from '@material-ui/core/Radio';
 import axios from 'axios'
 
-var formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
-function numberWithCommas(x) {
-  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-}
 
 export const Landing = () => {
 
@@ -26,11 +18,9 @@ export const Landing = () => {
   const [selectedValue, setSelectedValue] = useState('1');
 
   useEffect(() => {
-
-    // getSalesInfo();
+    getSalesInfo();
     getPrecios();
     ScrollTop();
-
   }, []);
 
   const handleRadioChange = (e) => {
@@ -83,14 +73,6 @@ export const Landing = () => {
         />
 
         <main id='main'>
-          <div class="ui segment">
-            <div class="ui active inverted dimmer">
-              <div class="ui large text loader">Loading</div>
-            </div>
-            <p>.</p>
-            <p>.</p>
-            <p>.</p>
-          </div>
           <h6>Información a un dia vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date()).toISOString().substring(0, 10)}</h6>
           <div className="flex-container">
             <div className="flex-item-cards">
@@ -118,13 +100,13 @@ export const Landing = () => {
               <TankChart></TankChart>
             </div>
           </div>
-   {/* <div className="flex-container">
+          {/* <div className="flex-container">
             <div className="flex-item">
               <h6 className="custom-h6">Gráfica de ventas a un día vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date).toISOString().substring(0, 10)}</h6>
               <br />
               <Chart data={dataRes} success={valid} />
             </div>
-          </div> */}       
+          </div> */}
           <br />
           <label>
             <Radio
@@ -166,4 +148,12 @@ export const Landing = () => {
     );
   }
 
+}
+var formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
