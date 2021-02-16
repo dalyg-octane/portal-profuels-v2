@@ -8,30 +8,19 @@ import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 
-const useStyles = makeStyles((theme) => ({
-    container: {
-        display: 'flex',
-        flexWrap: 'wrap',
-    },
-    textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
-        width: 200,
-    },
-}));
-
 const Auxiliardemovimiento = () => {
 
     const classes = useStyles();
     const [data, setData] = useState([]);
     const [open, setOpen] = React.useState(false);
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
+    const handleClose = (r) => {
+
+        if (r === 'clickaway') {
             return;
         }
-
         setOpen(false);
+
     };
 
     const consultaMov = async () => {
@@ -43,43 +32,16 @@ const Auxiliardemovimiento = () => {
 
             try {
 
-                var url = '/getTransactions'
-
-                let res = await fetch(url, {
-                    method: 'post',
-                    headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                        'Access-Control-Allow-Origin': '*'
-                    },
-                    body: JSON.stringify({
-                        fechaInicial: fechaInicio,
-                        fechaFinal: fechaFinal
-                    }),
-                });
-
-
-                let result = await res.json();
-
-                if (result && result.success) {
-
-                    setData(result.data);
-
-                }
+                const { data } = await axios.post('/getTransactions', { fechaInicial: fechaInicio, fechaFinal: fechaFinal });
+                setData(data.data);
 
             } catch (e) {
-
                 console.log(e);
-
             }
 
         } else {
-
             setOpen(true);
-
-
         }
-
 
     }
 
@@ -150,5 +112,17 @@ const Auxiliardemovimiento = () => {
         </React.Fragment>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    textField: {
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: 200,
+    },
+}));
 
 export default Auxiliardemovimiento

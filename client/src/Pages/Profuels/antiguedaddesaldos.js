@@ -3,6 +3,7 @@ import UsrModel from '../../Models/UsrCredentials'
 import { NavBar, HorizonNavBar } from '../../Components/NavBar';
 import { NormalTable } from '../../Components/Table';
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import axios from 'axios'
 
 const Antiguedaddesaldos = () => {
 
@@ -15,32 +16,12 @@ const Antiguedaddesaldos = () => {
     const consultaAntiguedaad = async () => {
 
         try {
-
-            var url = '/GetAntiguedad'
-
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    'Access-Control-Allow-Origin': '*'
-                },
-            });
-
-
-            let result = await res.json();
-
-            if (result && result.success) {
-
-                setData(result.data);
-
-            }
-
+            const { data } = await axios.post('/GetAntiguedad/', {});
+            setData(data.data);
         } catch (e) {
-
             console.log(e);
-
         }
+
     }
 
     return (

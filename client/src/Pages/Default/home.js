@@ -8,6 +8,7 @@ import ScrollTop from '../../Components/CommonFunctions/ScrollTop'
 import GasPriceElement from '../../Components/GasPrices'
 import { TankChart } from '../../Components/TankCharts';
 import Radio from '@material-ui/core/Radio';
+import axios from 'axios'
 
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -26,7 +27,7 @@ export const Landing = () => {
 
   useEffect(() => {
 
-    getSalesInfo();
+    // getSalesInfo();
     getPrecios();
     ScrollTop();
 
@@ -42,62 +43,23 @@ export const Landing = () => {
   const getPrecios = async (t = 1) => {
 
     try {
-
-      var url = '/GetPrecios/' + t.toString();
-
-      let res = await fetch(url, {
-        method: 'post',
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
-
-      let result = await res.json();
-
-      setDataPrecios([]);
-      if (result && result.success) {
-        setDataPrecios(result.data);
-        return;
-      }
-
+      const { data } = await axios.post('/GetPrecios/' + t.toString(), {});
+      setDataPrecios(data.data);
     } catch (e) {
-
       console.log(e);
-
     }
-  }
 
+  }
 
   const getSalesInfo = async () => {
 
     try {
-
-      var url = '/getSalesInfo'
-
-      let res = await fetch(url, {
-        method: 'post',
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
-
-      let result = await res.json();
-
-      if (result && result.success) {
-        setData(result.data);
-        return;
-
-      }
-
+      const { res } = await axios.post(`/getSalesInfo`, {});
+      setData(res.data);
     } catch (e) {
-
       console.log(e);
-
     }
+
   }
 
   document.body.style.backgroundColor = "#F8F8F8";
@@ -121,6 +83,14 @@ export const Landing = () => {
         />
 
         <main id='main'>
+          <div class="ui segment">
+            <div class="ui active inverted dimmer">
+              <div class="ui large text loader">Loading</div>
+            </div>
+            <p>.</p>
+            <p>.</p>
+            <p>.</p>
+          </div>
           <h6>Información a un dia vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date()).toISOString().substring(0, 10)}</h6>
           <div className="flex-container">
             <div className="flex-item-cards">
@@ -148,13 +118,13 @@ export const Landing = () => {
               <TankChart></TankChart>
             </div>
           </div>
-          {/* <div className="flex-container">
+   {/* <div className="flex-container">
             <div className="flex-item">
               <h6 className="custom-h6">Gráfica de ventas a un día vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date).toISOString().substring(0, 10)}</h6>
               <br />
               <Chart data={dataRes} success={valid} />
             </div>
-          </div> */}
+          </div> */}       
           <br />
           <label>
             <Radio
@@ -179,7 +149,7 @@ export const Landing = () => {
             Precios para mañana
           </label>
           <br />
-          <GasPriceElement data={dataPrecios} />
+          <GasPriceElement key='gasElement' data={dataPrecios} />
           <a id="hoverUp" href="/#"><FontAwesomeIcon icon={faChevronUp} /></a>
 
         </main>

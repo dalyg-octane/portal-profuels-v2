@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, LogoProfuelsFull } from '../../Components/DynamicComponents'
 import UsrModel from '../../Models/UsrCredentials'
 import TextField from '@material-ui/core/TextField';
+import axios from 'axios'
 
 export class login extends React.Component {
 
@@ -9,7 +10,7 @@ export class login extends React.Component {
         Usr: '',
         Pwd: '',
         Incorrect: false,
-        Msg:'',
+        Msg: '',
         buttonDisabled: false
     }
 
@@ -19,7 +20,7 @@ export class login extends React.Component {
             Usr: '',
             Pwd: '',
             Incorrect: true,
-            Msg:'Usuario y/o contraseña incorrectos.',
+            Msg: 'Usuario y/o contraseña incorrectos.',
             buttonDisabled: false
         })
 
@@ -39,29 +40,14 @@ export class login extends React.Component {
 
         try {
 
-            var url = '/login'
+            const { data } = await axios.post('/login', {Usr: this.state.Usr,Pwd: this.state.Pwd});
 
-            let res = await fetch(url, {
-                method: 'post',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
-                body: JSON.stringify({
-                    Usr: this.state.Usr,
-                    Pwd: this.state.Pwd
-                }),
-            });
+            if (data && data.success) {
 
-            let result = await res.json();
-
-            if (result && result.success) {
-
-                UsrModel.userName = result.userName;
+                UsrModel.userName = data.userName;
                 UsrModel.isLoggedIn = true;
 
-            } else if (result && !result.success) {
+            } else if (data && !data.success) {
 
                 this.resetForm();
             }
@@ -79,7 +65,7 @@ export class login extends React.Component {
 
         this.setState({
             Incorrect: false,
-            Msg:''
+            Msg: ''
         });
 
         val = val.trim();

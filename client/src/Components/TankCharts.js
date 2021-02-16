@@ -35,10 +35,6 @@ export const TankChart = () => {
                         />
                     )
                 })}
-
-
-                {/* <div className='container-img'>
-                </div> */}
             </div>
 
         </>

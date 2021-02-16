@@ -7,6 +7,7 @@ import LoggedIn from './Components/CommonFunctions/LoggedIn'
 export const App = observer(() => {
 
   useEffect(() => {
+    
     if (!sessionStorage['Animacion']) {
       sessionStorage.setItem('Animacion', true);
     }

@@ -51,7 +51,7 @@ const GasPriceElement = ({ data }) => {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>PU</td>
+                                                <td key='puPrices'>PU</td>
                                                 {e[1].map((e, i) => {
 
                                                     return (
@@ -60,7 +60,7 @@ const GasPriceElement = ({ data }) => {
                                                 })}
                                             </tr>
                                             <tr>
-                                                <td>IEPS</td>
+                                                <td key='puIEPS'>IEPS</td>
                                                 {e[1].map((e, i) => {
                                                     return (
                                                         <td>{e.IEPS}</td>
@@ -68,7 +68,7 @@ const GasPriceElement = ({ data }) => {
                                                 })}
                                             </tr>
                                             <tr>
-                                                <td>Precio molécula</td>
+                                                <td key='puPM'>Precio molécula</td>
                                                 {e[1].map((e, i) => {
                                                     return (
                                                         <td>{e['Precio molecula']}</td>
@@ -76,7 +76,7 @@ const GasPriceElement = ({ data }) => {
                                                 })}
                                             </tr>
                                             <tr style={{ borderTop: '1px solid rgb(220,220,220)' }}>
-                                                <td>Precio con IVA</td>
+                                                <td key='puIVA'>Precio con IVA</td>
                                                 {e[1].map((e, i) => {
                                                     return (
                                                         <td style={{ fontWeight: '500' }}>{e['Precio con IVA']}</td>
@@ -84,7 +84,7 @@ const GasPriceElement = ({ data }) => {
                                                 })}
                                             </tr>
                                             <tr>
-                                                <td>Precio molécula mas IEPS</td>
+                                                <td key='puMI'>Precio molécula mas IEPS</td>
                                                 {e[1].map((e, i) => {
                                                     return (
                                                         <td style={{ fontWeight: '500' }}>{e['Precio C/Imp']}</td>
