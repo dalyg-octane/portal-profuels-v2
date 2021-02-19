@@ -7,6 +7,7 @@ import GasPemex from '../Images/pemex.png'
 import GasUnbranded from '../Images/unbranded.png'
 import ProfuelsFlamesImg from '../Images/Flamas.png'
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
+import { IconButton } from '@material-ui/core/';
 import moment from "moment";
 import axios from 'axios'
 export class Arco extends React.Component {
@@ -126,6 +127,7 @@ function _base64ToArrayBuffer(base64) {
 export const EdoCta = () => {
 
     const [meses, setMeses] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     useEffect(() => {
         generateMonths();
@@ -140,7 +142,9 @@ export const EdoCta = () => {
 
     const getAcctSmnt = async (fechaCorte, IdCIa) => {
 
+
         try {
+            setLoading(true);
             const { data } = await axios.post('/downloadAcctSmt', { Fecha: fechaCorte, IdCia: IdCIa });
             var jsonRes = JSON.parse(JSON.parse(JSON.parse(data.data)));
             const file = new Blob(
@@ -148,6 +152,7 @@ export const EdoCta = () => {
                 { type: 'application/pdf' });
             let url = window.URL.createObjectURL(file);
             let a = document.createElement('a');
+            setLoading(false);
             a.href = url;
             a.download = `${jsonRes[0].Id}`;
             a.click();
@@ -166,10 +171,15 @@ export const EdoCta = () => {
                             <label>{moment(m.m, 'MM').format('MMMM')} <label style={{ fontWeight: 'bold' }}>{new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)}</label></label>
                         </div>
                         <div className="col-md-8" style={{ textAlign: 'right' }}>
-                            <PictureAsPdfOutlinedIcon className='hover-icon' fontSize="large" style={{ color: 'red', fontSize: 31 }} onClick={(e) => {
+
+
+                            <IconButton aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
                                 e.preventDefault();
                                 getAcctSmnt((new Date(m.a, m.m - 1 + 1, 0).toISOString().substring(0, 10)), 'P8301');
-                            }} />
+                            }}>
+                                <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                            </IconButton>
+
                         </div>
                     </div>
                 </React.Fragment>

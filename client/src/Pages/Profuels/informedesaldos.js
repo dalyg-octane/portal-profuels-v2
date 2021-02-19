@@ -3,9 +3,6 @@ import UsrModel from '../../Models/UsrCredentials'
 import { NavBar, HorizonNavBar } from '../../Components/NavBar';
 import JsonToSelect from '../../Components/JsonToSelect'
 import { NormalTable } from '../../Components/Table';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-
 import axios from 'axios'
 
 const Informedesaldos = () => {
@@ -13,18 +10,10 @@ const Informedesaldos = () => {
     const [data, setData] = useState([]);
     const [dataMes, setDataMes] = useState([]);
     const [dataTable, setDataTbl] = useState([]);
-    const [open, setOpen] = React.useState(false);
 
     useEffect(() => {
         estacionesList();
     }, []);
-
-    const handleClose = (r) => {
-        if (r === 'clickaway') {
-            return;
-        }
-        setOpen(false);
-    };
 
     const estacionesList = async () => {
 
@@ -39,7 +28,7 @@ const Informedesaldos = () => {
 
     }
 
-    const consultaInforme = async (idElm) => {
+    const consultaInforme = async () => {
 
         var selMes = document.getElementById('selMes').value
         var selEst = document.getElementById('selEstaciones').value
@@ -52,14 +41,6 @@ const Informedesaldos = () => {
             } catch (e) {
                 console.log(e);
             }
-        } else {
-            return (
-                <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                    <Alert onClose={handleClose} severity="warning">
-                        Seleccione los filtros
-                </Alert>
-                </Snackbar>
-            )
         }
     }
 

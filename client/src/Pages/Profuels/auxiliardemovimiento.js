@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UsrModel from '../../Models/UsrCredentials'
 import { NavBar, HorizonNavBar } from '../../Components/NavBar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,14 +7,28 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
-import axios from 'axios'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
+import axios from 'axios'
 
 const Auxiliardemovimiento = () => {
 
     const classes = useStyles();
     const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [isLoading, setLoading] = useState(true);
+
+    var todayD = new Date();
+    const [fechaFin, setFechaFin] = useState(todayD.toISOString().slice(0, 10));
+    todayD.setDate(todayD.getDate() - 5);
+    const [fechaIni, setFechaIni] = useState(todayD.toISOString().slice(0, 10));
+
+
+    useEffect(() => {
+
+        consultaMov();
+
+    }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
     const handleClose = (r) => {
         if (r === 'clickaway') {
@@ -25,13 +39,11 @@ const Auxiliardemovimiento = () => {
 
     const consultaMov = async () => {
 
-        const fechaInicio = document.getElementById('dateInicio').value;
-        const fechaFinal = document.getElementById('dateFinal').value;
-
-        if (fechaFinal >= fechaInicio) {
+        if (fechaFin >= fechaIni) {
             try {
-                const { data } = await axios.post('/getTransactions', { fechaInicial: fechaInicio, fechaFinal: fechaFinal });
+                const { data } = await axios.post('/getTransactions', { fechaInicial: fechaIni, fechaFinal: fechaFin });
                 setData(data.data);
+                setLoading(false);
 
             } catch (e) {
                 console.log(e);
@@ -68,9 +80,11 @@ const Auxiliardemovimiento = () => {
                                 id="dateInicio"
                                 label="Inicio"
                                 type="date"
-                                defaultValue={new Date().toISOString().slice(0, 10)}
-                                onChange={() => {
+                                defaultValue={fechaIni}
+                                onChange={(e) => {
+                                    setFechaIni(e.target.value)
                                     consultaMov();
+                                    // consultaMov();
                                 }}
                                 className={classes.textField}
                                 InputLabelProps={{
@@ -81,9 +95,11 @@ const Auxiliardemovimiento = () => {
                                 id="dateFinal"
                                 label="Final"
                                 type="date"
-                                defaultValue={new Date().toISOString().slice(0, 10)}
-                                onChange={() => {
+                                defaultValue={fechaFin}
+                                onChange={(e) => {
+                                    setFechaFin(e.target.value)
                                     consultaMov();
+                                    // consultaMov();
                                 }}
                                 className={classes.textField}
                                 InputLabelProps={{
@@ -95,8 +111,12 @@ const Auxiliardemovimiento = () => {
                     <br></br>
                     <br></br>
                     <div className='row'>
-                        <div className='col-md-12'>
-                            <NormalTable data={data} docsCol={true}></NormalTable>
+                        <div className='col-md-12' style={{ textAlign: 'center' }}>
+                            {(isLoading) ?
+                                <CircularProgress />
+                                :
+                                <NormalTable data={data} docsCol={true}></NormalTable>
+                            }
                         </div>
                     </div>
                 </div>

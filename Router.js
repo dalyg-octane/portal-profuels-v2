@@ -37,7 +37,7 @@ class Router {
                 var fechas = [];
                 var ma = {};
 
-                for (var i = 1; i <= 6; i++) {
+                for (var i = 1; i <= 3; i++) {
 
                     var newDate = new Date(date.setMonth(date.getMonth() - 1));
                     ma = { a: newDate.getFullYear(), m: (newDate.getMonth() + 1) }
@@ -147,7 +147,6 @@ class Router {
                     if (body) {
 
                         const apiRes = JSON.parse(body);
-
                         res.json({
                             success: true,
                             data: apiRes

@@ -8,14 +8,15 @@ import ScrollTop from '../../Components/CommonFunctions/ScrollTop'
 import GasPriceElement from '../../Components/GasPrices'
 import { TankChart } from '../../Components/TankCharts';
 import Radio from '@material-ui/core/Radio';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios'
-
 
 export const Landing = () => {
 
   const [dataRes, setData] = useState([]);
   const [dataPrecios, setDataPrecios] = useState([]);
   const [selectedValue, setSelectedValue] = useState('1');
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     getSalesInfo();
@@ -34,7 +35,13 @@ export const Landing = () => {
 
     try {
       const { data } = await axios.post('/GetPrecios/' + t.toString(), {});
-      setDataPrecios(data.data);
+
+      if (data && data.success) {
+        setDataPrecios(data.data);
+      } else {
+        setDataPrecios([]);
+      }
+
     } catch (e) {
       console.log(e);
     }
@@ -44,8 +51,9 @@ export const Landing = () => {
   const getSalesInfo = async () => {
 
     try {
-      const { res } = await axios.post(`/getSalesInfo`, {});
-      setData(res.data);
+      const { data } = await axios.post(`/getSalesInfo`, {});
+      setData(data.data);
+      setLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -64,32 +72,52 @@ export const Landing = () => {
     return (
 
       <React.Fragment>
-
         <NavBar
           text={UsrModel.userName.toUpperCase()}
         />
-
-        <HorizonNavBar
-        />
-
+        <HorizonNavBar />
         <main id='main'>
           <h6>Información a un dia vencido: {(d => new Date(d.setDate(d.getDate() - 1)))(new Date()).toISOString().substring(0, 10)}</h6>
           <div className="flex-container">
             <div className="flex-item-cards">
               <h6 className="custom-h6">Ventas totales</h6>
-              <p className='custom-p' style={{ color: 'green' }}>{formatter.format(venTot)}</p>
+              <p className='custom-p' style={{ color: 'green' }}>
+                {(isLoading) ?
+                  <CircularProgress size={30} />
+                  :
+                  formatter.format(venTot)
+                }
+              </p>
             </div>
             <div className="flex-item-cards">
               <h6 className="custom-h6">Ventas totales turno 1</h6>
-              <p className='custom-p'>{`${numberWithCommas(venTotT1.toFixed(2))}`} <label className='custom-lbl'>Lts</label></p>
+              <p className='custom-p'>
+                {(isLoading) ?
+                  <CircularProgress size={30} />
+                  :
+                  `${numberWithCommas(venTotT1.toFixed(2))} Lts`
+                }
+              </p>
             </div>
             <div className="flex-item-cards">
               <h6 className="custom-h6">Ventas totales turno 2</h6>
-              <p className='custom-p'>{`${numberWithCommas(venTotT2.toFixed(2))}`} <label className='custom-lbl'>Lts</label></p>
+              <p className='custom-p'>
+                {(isLoading) ?
+                  <CircularProgress size={30} />
+                  :
+                  `${numberWithCommas(venTotT2.toFixed(2))} Lts`
+                }
+              </p>
             </div>
             <div className="flex-item-cards">
               <h6 className="custom-h6">Ventas totales turno 3</h6>
-              <p className='custom-p'>{`${numberWithCommas(venTotT3.toFixed(2))}`} <label className='custom-lbl'>Lts</label></p>
+              <p className='custom-p'>
+                {(isLoading) ?
+                  <CircularProgress size={30} />
+                  :
+                  `${numberWithCommas(venTotT3.toFixed(2))} Lts`
+                }
+              </p>
             </div>
           </div>
           <br />
@@ -133,10 +161,8 @@ export const Landing = () => {
           <br />
           <GasPriceElement key='gasElement' data={dataPrecios} />
           <a id="hoverUp" href="/#"><FontAwesomeIcon icon={faChevronUp} /></a>
-
         </main>
-
-      </React.Fragment>
+      </React.Fragment >
     );
 
   } else {

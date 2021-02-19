@@ -7,18 +7,16 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@material-ui/core/';
 import { Link } from 'react-router-dom';
 import ScrollTop from '../../Components/CommonFunctions/ScrollTop'
-import axios from 'axios'
+import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
 
-var formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
+import axios from 'axios'
 
 export const Profuels = () => {
 
     const [data, setData] = useState([]);
-
-    document.body.style.backgroundColor = '#F8F8F8';
+    const [saldoDiv, setSaldo] = useState(false);
+    const variants = ['h1', 'h3', 'body1', 'caption', 'h1', 'body1'];
 
     useEffect(() => {
 
@@ -37,6 +35,7 @@ export const Profuels = () => {
             if (mounted) {
                 const { data } = await axios.post('/GetSaldos', {});
                 setData(data.data);
+                setSaldo(true)
             }
 
         } catch (err) {
@@ -47,6 +46,8 @@ export const Profuels = () => {
 
     const saldoTot = data.reduce((acc, val) => acc + val.MontoASum, 0);
     const dataInvoices = data.map(({ MontoASum, ...keepAttrs }) => keepAttrs);
+
+    document.body.style.backgroundColor = '#F8F8F8';
 
     return (
 
@@ -95,14 +96,27 @@ export const Profuels = () => {
                     </div>
                 </div>
                 <br />
+
                 <div id='div-profuels-table'>
-                    <DynamicTable data={dataInvoices} />
+                    {(saldoDiv) ?
+                        <DynamicTable data={dataInvoices} />
+                        :
+                        <div style={{ padding: '2%', backgroundColor: 'white', borderRadius: '5px', height: '60%' }}>
+                            {variants.map((variant) => (
+                                <Typography component="div" key={variant} variant={variant}>
+                                    <Skeleton />
+                                </Typography>
+                            ))}
+                        </div>
+                    }
                 </div>
                 <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
             </main>
         </React.Fragment>
     )
-
 }
-
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
 export default Profuels

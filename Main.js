@@ -14,8 +14,8 @@ App.use(express.static(path.join(__dirname, './client/build')));
 App.use(express.json());
 
 App.use(session({
-    key: 'sdfsfs',
-    secret: 'asdadadads',
+    key: 'userSession',
+    secret: 'none',
     resave: false,
     saveUninitialized: false,
     cookie: {

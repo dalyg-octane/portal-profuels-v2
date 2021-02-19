@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, IconButton } from '@material-ui/core/';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
@@ -8,30 +8,91 @@ import Collapse from '@material-ui/core/Collapse';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import MUIDataTable from "mui-datatables";
-import axios from 'axios';
+import axios from 'axios'
 
-const downloadFile = async (Opc, IdFact) => {
+export const NormalTable = ({ data, docsCol }) => {
 
-    try {
-        const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
-        if (data && data.success) {
-            const file = new Blob(
-                [_base64ToArrayBuffer(data.data[0].Data)],
-                { type: data.data[0].contentType });
-            let url = window.URL.createObjectURL(file);
-            if (Opc === 1) {
-                window.open(url);
-            } else {
-                let a = document.createElement('a');
-                a.href = url;
-                a.download = `${data.data[0].IdDoc}`;
-                a.click();
+    var columns = [];
+    const [isLoading, setLoading] = useState(false);
+
+    const columns1 = ["Sin información"];
+    const data1 = [[""]];
+
+    const DownloadFile = async (Opc, IdFact) => {
+
+        try {
+            setLoading(true);
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            if (data && data.success) {
+                const file = new Blob(
+                    [_base64ToArrayBuffer(data.data[0].Data)],
+                    { type: data.data[0].contentType });
+                let url = window.URL.createObjectURL(file);
+                if (Opc === 1) {
+                    setLoading(false);
+                    window.open(url);
+                } else {
+                    setLoading(false);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.data[0].IdDoc}`;
+                    a.click();
+                }
             }
+        } catch (e) {
+            console.log(e);
         }
-    } catch (e) {
-        console.log(e);
+
     }
 
+    if (data.length) {
+
+        columns = Object.keys(data[0]).map((key, index) => {
+            return {
+                name: key,
+                label: replaceAll(key, '_', ' '),
+            }
+        });
+
+        if (docsCol) {
+
+            columns.push(
+                {
+                    name: 'keyDoc',
+                    label: 'Documentos',
+                    options: {
+                        customBodyRender: (value, tableMeta, updateValue) => (
+                            <>
+                                <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
+                                    DownloadFile(0, tableMeta.rowData[0]);
+                                }}>
+                                    <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
+                                </IconButton>
+
+                                <IconButton id={tableMeta.rowData[0]} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
+                                    DownloadFile(1, tableMeta.rowData[0]);
+                                }}>
+                                    <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                                </IconButton>
+                            </>
+                        )
+                    }
+                }
+            );
+
+        }
+    };
+
+    return (
+        <MUIDataTable
+            title={"Estaciones"}
+            data={data.length ? data : data1}
+            columns={columns.length ? columns : columns1}
+            options={{
+                selectableRows: 'none'
+            }}
+        />
+    );
 }
 
 export const DynamicTable = ({ data }) => {
@@ -41,7 +102,37 @@ export const DynamicTable = ({ data }) => {
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [isLoading, setLoading] = useState(false);
+
     const classes = useStyles();
+
+    const DownloadFile = async (Opc, IdFact) => {
+
+        try {
+            setLoading(true);
+
+            const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            if (data && data.success) {
+                const file = new Blob(
+                    [_base64ToArrayBuffer(data.data[0].Data)],
+                    { type: data.data[0].contentType });
+                let url = window.URL.createObjectURL(file);
+                if (Opc === 1) {
+                    setLoading(false);
+                    window.open(url);
+                } else {
+                    setLoading(false);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${data.data[0].IdDoc}`;
+                    a.click();
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
 
     if (data.length > 0) {
 
@@ -101,16 +192,16 @@ export const DynamicTable = ({ data }) => {
                     })}
                     <TableCell key={'iconFile' + dataRow.Número_de_factura}>
 
-                        <IconButton aria-label="expand row" size="small" id={dataRow.Número_de_factura} onClick={(e) => {
-                            downloadFile(0, dataRow.Número_de_factura);
+                        <IconButton id={dataRow.Número_de_factura} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
+                            DownloadFile(0, dataRow.Número_de_factura);
                         }}>
-                            <DescriptionOutlinedIcon color={'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
+                            <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
                         </IconButton>
 
-                        <IconButton aria-label="expand row" size="small" id={dataRow.Número_de_factura} onClick={(e) => {
-                            downloadFile(1, dataRow.Número_de_factura);
+                        <IconButton id={dataRow.Número_de_factura} aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
+                            DownloadFile(1, dataRow.Número_de_factura);
                         }}>
-                            <PictureAsPdfOutlinedIcon color={'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                            <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
                         </IconButton>
 
                     </TableCell>
@@ -207,63 +298,13 @@ export const DynamicTable = ({ data }) => {
         </Paper>
     );
 }
-export const NormalTable = ({ data, docsCol }) => {
 
-    var columns = [];
-    const columns1 = ["Sin información"];
-    const data1 = [[""]];
-
-    if (data.length) {
-
-        columns = Object.keys(data[0]).map((key, index) => {
-            return {
-                name: key,
-                label: replaceAll(key, '_', ' '),
-            }
-        });
-
-        if (docsCol) {
-
-            columns.push(
-                {
-                    name: 'keyDoc',
-                    label: 'Documentos',
-                    options: {
-                        customBodyRender: (value, tableMeta, updateValue) => (
-                            <>
-                                <IconButton aria-label="expand row" size="small" id={tableMeta.rowData[0]} onClick={(e) => {
-                                    downloadFile(0, tableMeta.rowData[0]);
-                                }}>
-                                    <DescriptionOutlinedIcon color={'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
-                                </IconButton>
-
-                                <IconButton aria-label="expand row" size="small" id={tableMeta.rowData[0]} onClick={(e) => {
-                                    downloadFile(1, tableMeta.rowData[0]);
-                                }}>
-                                    <PictureAsPdfOutlinedIcon color={'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
-                                </IconButton>
-                            </>
-
-                        )
-                    }
-                }
-            );
-
-        }
-    }
-
-    return (
-        <MUIDataTable
-            title={"Estaciones"}
-            data={data.length ? data : data1}
-            columns={columns.length ? columns : columns1}
-            options={{
-                selectableRows: false
-            }}
-        />
-    )
+function replaceAll(string, search, replace) {
+    return string.split(search).join(replace);
 }
+
 function _base64ToArrayBuffer(base64) {
+
     var binary_string = window.atob(base64);
     var len = binary_string.length;
     var bytes = new Uint8Array(len);
@@ -271,10 +312,6 @@ function _base64ToArrayBuffer(base64) {
         bytes[i] = binary_string.charCodeAt(i);
     }
     return bytes.buffer;
-}
-
-function replaceAll(string, search, replace) {
-    return string.split(search).join(replace);
 }
 
 const useStyles = makeStyles({
