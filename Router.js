@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-//var url = 'http://localhost:8000/api'
-var url = 'https://portal.grupoeco.com.mx/sirexa/api'
+var url = 'http://localhost:8000/api'
+//var url = 'https://portal.grupoeco.com.mx/sirexa/api'
 
 class Router {
 
@@ -24,7 +24,64 @@ class Router {
         this.DownloadInvoiceFile(App);
         this.GetInventariosByUserKey(App);
         this.GetMonthsAcct(App);
+        this.GetRazonesSociales(App);
 
+    }
+
+
+    GetRazonesSociales(App) {
+
+        App.post('/GetRazonesSociales', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetRazonesSociales`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
     }
 
     GetMonthsAcct(App) {
@@ -685,7 +742,7 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                    "url": `${url}/GetSaldos/?Opc=2`,
+                    "url": `${url}/GetSaldos/?Opc=2&rfc=${req.body.rfc}`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 

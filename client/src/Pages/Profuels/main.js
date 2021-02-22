@@ -7,6 +7,8 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@material-ui/core/';
 import { Link } from 'react-router-dom';
 import ScrollTop from '../../Components/CommonFunctions/ScrollTop'
+import { GetRazonSoc } from '../../Components/GetRazonSoc'
+
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 
@@ -29,11 +31,20 @@ export const Profuels = () => {
 
     }, []);
 
-    const getSaldos = async (mounted) => {
+    const getSaldos = async (e) => {
 
         try {
-            if (mounted) {
-                const { data } = await axios.post('/GetSaldos', {});
+
+            setSaldo(false)
+
+
+            if (typeof e === 'boolean') {
+                const { data } = await axios.post('/GetSaldos', { rfc: '' });
+                setData(data.data);
+                setSaldo(true)
+
+            } else {
+                const { data } = await axios.post('/GetSaldos', { rfc: e });
                 setData(data.data);
                 setSaldo(true)
             }
@@ -43,7 +54,7 @@ export const Profuels = () => {
         }
 
     }
-
+ 
     const saldoTot = data.reduce((acc, val) => acc + val.MontoASum, 0);
     const dataInvoices = data.map(({ MontoASum, ...keepAttrs }) => keepAttrs);
 
@@ -58,6 +69,11 @@ export const Profuels = () => {
             <HorizonNavBar
             />
             <main>
+                <GetRazonSoc
+                    onclick={(e) => {
+                        getSaldos(e.target.id)
+                    }}
+                />
                 <div className='flex-container'>
                     <div className='flex-item' style={{ textAlign: 'center' }}>
                         <p>Estatus de cuenta: <span className='boldText' style={{ color: '#e3026f' }}> no corriente</span></p>
@@ -102,8 +118,8 @@ export const Profuels = () => {
                         <DynamicTable data={dataInvoices} />
                         :
                         <div style={{ padding: '2%', backgroundColor: 'white', borderRadius: '5px', height: '60%' }}>
-                            {variants.map((variant) => (
-                                <Typography component="div" key={variant} variant={variant}>
+                            {variants.map((variant,i) => (
+                                <Typography component="div" key={`${variant}-${i}`} variant={variant}>
                                     <Skeleton />
                                 </Typography>
                             ))}

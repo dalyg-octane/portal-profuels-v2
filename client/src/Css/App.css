@@ -165,6 +165,10 @@ button:disabled {
   font-weight: 600;
 }
 
+.hoverEl {
+  cursor: pointer;
+}
+
 #hoverUp {
   padding: 0.5rem;
   display: inline-block;
@@ -228,14 +232,13 @@ button:disabled {
 .container-img {
   background: url('../Images/gas-pump.png') no-repeat;
   background-size: contain;
-  background-repeat:   no-repeat;
-  background-position: center center; 
+  background-repeat: no-repeat;
+  background-position: center center;
   width: 200px;
   height: 200px;
 }
 
-.custom-form-control
-{
+.custom-form-control {
   width: 50% !important;
 }
 

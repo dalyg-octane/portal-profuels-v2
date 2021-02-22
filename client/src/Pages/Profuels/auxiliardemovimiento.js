@@ -20,7 +20,7 @@ const Auxiliardemovimiento = () => {
 
     var todayD = new Date();
     const [fechaFin, setFechaFin] = useState(todayD.toISOString().slice(0, 10));
-    todayD.setDate(todayD.getDate() - 5);
+    todayD.setDate(todayD.getDate() - 3);
     const [fechaIni, setFechaIni] = useState(todayD.toISOString().slice(0, 10));
 
 
@@ -42,7 +42,12 @@ const Auxiliardemovimiento = () => {
         if (fechaFin >= fechaIni) {
             try {
                 const { data } = await axios.post('/getTransactions', { fechaInicial: fechaIni, fechaFinal: fechaFin });
-                setData(data.data);
+
+                if (data && data.success) {
+                    setData(data.data);
+                } else {
+                    setData([]);
+                }
                 setLoading(false);
 
             } catch (e) {
@@ -82,6 +87,9 @@ const Auxiliardemovimiento = () => {
                                 type="date"
                                 defaultValue={fechaIni}
                                 onChange={(e) => {
+                                    if (!isLoading) {
+                                        setLoading(true);
+                                    }
                                     setFechaIni(e.target.value)
                                     consultaMov();
                                     // consultaMov();
@@ -97,6 +105,9 @@ const Auxiliardemovimiento = () => {
                                 type="date"
                                 defaultValue={fechaFin}
                                 onChange={(e) => {
+                                    if (!isLoading) {
+                                        setLoading(true);
+                                    }
                                     setFechaFin(e.target.value)
                                     consultaMov();
                                     // consultaMov();
