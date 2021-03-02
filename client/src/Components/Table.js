@@ -8,15 +8,25 @@ import Collapse from '@material-ui/core/Collapse';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import PictureAsPdfOutlinedIcon from '@material-ui/icons/PictureAsPdfOutlined';
 import MUIDataTable from "mui-datatables";
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios'
 
 export const NormalTable = ({ data, docsCol }) => {
 
     var columns = [];
     const [isLoading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
 
     const columns1 = ["Sin información"];
     const data1 = [[""]];
+    const handleClose = (r) => {
+        if (r === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
 
     const DownloadFile = async (Opc, IdFact) => {
 
@@ -38,7 +48,12 @@ export const NormalTable = ({ data, docsCol }) => {
                     a.download = `${data.data[0].IdDoc}`;
                     a.click();
                 }
+            } else {
+                setLoading(false);
+                setOpen(true);
+
             }
+
         } catch (e) {
             console.log(e);
         }
@@ -84,14 +99,21 @@ export const NormalTable = ({ data, docsCol }) => {
     };
 
     return (
-        <MUIDataTable
-            title={"Estaciones"}
-            data={data.length ? data : data1}
-            columns={columns.length ? columns : columns1}
-            options={{
-                selectableRows: 'none'
-            }}
-        />
+        <>
+            <MUIDataTable
+                title={"Estaciones"}
+                data={data.length ? data : data1}
+                columns={columns.length ? columns : columns1}
+                options={{
+                    selectableRows: 'none'
+                }}
+            />
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert onClose={handleClose} severity="error">
+                    Hubo un problema al consultar la factura.
+                </Alert>
+            </Snackbar>
+        </>
     );
 }
 
@@ -103,8 +125,16 @@ export const DynamicTable = ({ data }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [isLoading, setLoading] = useState(false);
-
+    const [open, setOpen] = useState(false);
     const classes = useStyles();
+
+    const handleClose = (r) => {
+        if (r === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
 
     const DownloadFile = async (Opc, IdFact) => {
 
@@ -127,6 +157,10 @@ export const DynamicTable = ({ data }) => {
                     a.download = `${data.data[0].IdDoc}`;
                     a.click();
                 }
+            } else {
+                setLoading(false);
+                setOpen(true);
+
             }
         } catch (e) {
             console.log(e);
@@ -295,6 +329,11 @@ export const DynamicTable = ({ data }) => {
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
             />
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                <Alert onClose={handleClose} severity="error">
+                    Hubo un problema al consultar la factura.
+                </Alert>
+            </Snackbar>
         </Paper>
     );
 }
@@ -324,4 +363,5 @@ const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+
 });
