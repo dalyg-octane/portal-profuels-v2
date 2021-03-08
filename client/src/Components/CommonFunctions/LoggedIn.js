@@ -4,7 +4,7 @@ import axios from 'axios'
 const LoggedIn = async () => {
 
     try {
-        const { data } = await axios.post(`/`, {});
+        const { data } = await axios.post(`/isLoggedIn`, {});
         if (data && data.success) {
             UsrModel.userName = data.userName;
             UsrModel.loading = false;
