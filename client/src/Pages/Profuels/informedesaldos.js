@@ -18,7 +18,7 @@ const Informedesaldos = () => {
     const estacionesList = async () => {
 
         try {
-            const { data } = await axios.post('/GetEstaciones', {});
+            const { data } = await axios.post('/GetEstaciones', { opc: 4 });
             setData(data.data);
             setDataMes(months);
 

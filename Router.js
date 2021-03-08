@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-var url = 'http://localhost:8000/api'
-//var url = 'https://portal.grupoeco.com.mx/sirexa/api'
+//var url = 'http://localhost:8000/api'
+var url = 'https://portal.grupoeco.com.mx/sirexa/api'
 
 class Router {
 
@@ -25,8 +25,123 @@ class Router {
         this.GetInventariosByUserKey(App);
         this.GetMonthsAcct(App);
         this.GetRazonesSociales(App);
+        this.GetFechaCorte(App);
+        this.GetCtrlVolFile(App);
 
     }
+
+    GetCtrlVolFile(App) {
+
+        App.post('/GetCtrlVolFile', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetCtrlVolFile?opc=${req.body.opc}&est=${req.body.est}&fechacorte=${req.body.fcorte}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        console.log(body);
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
+
+    GetFechaCorte(App) {
+
+        App.post('/GetFechaCorte', (req, res) => {
+
+            try {
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetFechaCorte?opc=${req.body.opc}&est=${req.body.est}`,
+                    body: JSON.stringify({}),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
 
 
     GetRazonesSociales(App) {
@@ -468,7 +583,7 @@ class Router {
 
                 Request.post({
                     "headers": { "content-type": "application/json" },
-                    "url": `${url}/GetEstaciones/?Opc=${4}`,
+                    "url": `${url}/GetEstaciones/?Opc=${req.body.opc}`,
                     body: JSON.stringify(u),
                 }, (error, response, body) => {
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { UserLogo } from '../Components/DynamicComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faBell, faFire, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faBell, faFire, faHome, faChartLine } from '@fortawesome/free-solid-svg-icons'
 import UsrModel from '../Models/UsrCredentials'
 import { Badge, Typography, Breadcrumbs } from '@material-ui/core'
 import MailIcon from '@material-ui/icons/Mail'
@@ -31,23 +31,25 @@ export const HorizonNavBar = () => {
             <ul className='navbarHor-nav'>
                 <li className='navHor-item'>
                     <Breadcrumbs aria-label="breadcrumb">
-                        <Link color="inherit" to='#'>
-                            Material-UI
+                        <Link color="inherit" to='/home'>
+                            Home
                         </Link>
-                        <Link color="inherit" to='#'>
+                        {/* <Link color="inherit" to='#'>
                             Core
                         </Link>
-                        <Typography color="textPrimary">Breadcrumb</Typography>
+                        <Typography color="textPrimary">Breadcrumb</Typography> */}
                     </Breadcrumbs>
                 </li>
 
                 <li className='navHor-item'>
-                    <Badge badgeContent={10} color='secondary' className={'horIcon'}>
+                    {/* <Badge badgeContent={10} color='secondary' className={'horIcon'}>
                         <MailIcon />
                     </Badge>
-                    <FontAwesomeIcon icon={faBell} size={'lg'} className={'horIcon'} />
-                    <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} /></Link>
+                    <FontAwesomeIcon icon={faBell} size={'lg'} className={'horIcon'} /> */}
+                    <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'}/></Link>
+                    <Link to='/reportes' className={'horIcon'}><FontAwesomeIcon icon={faChartLine} size={'lg'} color={'#183153'} title={'Reportes'} /></Link>
                     <Link to='/profuels' className={'horIcon'}><FontAwesomeIcon icon={faFire} size={'lg'} color={'#FF9600'} title={'Profuels'} /></Link>
+
                 </li>
             </ul>
         </nav>
