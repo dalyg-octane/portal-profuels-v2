@@ -34,7 +34,9 @@ export const Reportes = () => {
 
         var selEst = document.getElementById('selEstaciones').value
         const { data } = await axios.post(`/GetFechaCorte`, { opc: 0, est: selEst });
-        setFcorte(data.data);
+        if (data && data.success) {
+            setFcorte(data.data);
+        }
     }
     const GetCtrlFile = async (fecha) => {
 
