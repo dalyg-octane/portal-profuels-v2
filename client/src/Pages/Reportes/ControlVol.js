@@ -7,6 +7,7 @@ import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 import JsonToSelect from '../../Components/JsonToSelect'
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import { IconButton } from '@material-ui/core/';
+import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios'
 
 export const Reportes = () => {
@@ -38,7 +39,7 @@ export const Reportes = () => {
             setFcorte(data.data);
         }
     }
-    const GetCtrlFile = async (fecha) => {
+    const GetCtrlFile = async (fecha, opc) => {
 
         var selEst = document.getElementById('selEstaciones').value
         const { data } = await axios.post(`/GetCtrlVolFile`, { opc: 1, est: selEst, fcorte: fecha });
@@ -50,7 +51,7 @@ export const Reportes = () => {
             let url = window.URL.createObjectURL(file);
             let a = document.createElement('a');
             a.href = url;
-            a.download = `${data.data[0].nombreArchivoDia}`;
+            a.download = `${data.data[0].nombreArchivoMes}`;
             a.click();
 
             //Archivo del dia
@@ -74,7 +75,7 @@ export const Reportes = () => {
                 <div style={{ height: '100%', backgroundColor: 'white', margin: '0 3% 1% 3%', padding: '1% 3% 1% 3%' }}>
                     <div className='row'>
                         <div className='col-md-12'>
-                            <label className="titulo-seccion-form boldText">Descarga de reportes mensuales de control volumétrico</label>
+                            <label className="titulo-seccion-form boldText">Descarga de reportes de control volumétrico</label>
                         </div>
                     </div>
                     <br />
@@ -90,18 +91,23 @@ export const Reportes = () => {
                             return (
                                 <div className="row" style={{ backgroundColor: 'white', padding: '1rem', height: '6rem', margin: '1% 15% 1% 15%', border: 'solid 1px rgba(0,0,0,0.1)', borderRadius: '5px' }}>
                                     <div className="col-md-4">
-                                        <label style={{ fontWeight: 'bold' }}>Fecha de corte:&nbsp;</label><label>{m.date}</label>
+                                        <label style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{m.mes}</label>
                                     </div>
                                     <div className="col-md-4">
-                                        <label>{m.est}</label>
+                                        <p>Fecha corte de mensual: {m.fMes}</p>
+                                        <p>Fecha corte de diario: {m.fDia}</p>
                                     </div>
                                     <div className="col-md-4" style={{ textAlign: 'right' }}>
-                                        <IconButton aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
-                                            e.preventDefault(m.date);
-                                            GetCtrlFile(m.date);
-                                        }}>
-                                            <DescriptionOutlinedIcon color={(isLoading) ? 'disabled' : 'primary'} fontSize={'large'}></DescriptionOutlinedIcon>
-                                        </IconButton>
+                                        <Tooltip title={<span style={{ fontSize: '1.5em' }}>Descarga de reporte mensual y diario</span>}>
+
+                                            <IconButton aria-label="expand row" size="small" disabled={isLoading} onClick={(e) => {
+                                                e.preventDefault(m.date);
+                                                GetCtrlFile(m.date);
+                                            }}>
+                                                <DescriptionOutlinedIcon style={{ color: 'rgb(17,82,147)' }} fontSize={'large'}></DescriptionOutlinedIcon>
+                                            </IconButton>
+                                        </Tooltip>
+
                                     </div>
                                 </div>
                             )
@@ -124,3 +130,5 @@ function _base64ToArrayBuffer(base64) {
     }
     return bytes.buffer;
 }
+//Descarga de reporte mensual y diario tooltip
+//Descarga de reporte 

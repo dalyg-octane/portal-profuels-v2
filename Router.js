@@ -57,7 +57,6 @@ class Router {
 
                     if (body) {
 
-                        console.log(body);
                         const apiRes = JSON.parse(body);
 
                         res.json({
