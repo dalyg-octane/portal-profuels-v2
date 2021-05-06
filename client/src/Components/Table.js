@@ -33,6 +33,8 @@ export const NormalTable = ({ data, docsCol }) => {
         try {
             setLoading(true);
             const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            console.log(data);
+
             if (data && data.success) {
                 const file = new Blob(
                     [_base64ToArrayBuffer(data.data[0].Data)],
@@ -142,6 +144,7 @@ export const DynamicTable = ({ data }) => {
             setLoading(true);
 
             const { data } = await axios.post('/DownloadInvoiceFile', { IdFact: IdFact, Opc: Opc });
+            console.log(data);
             if (data && data.success) {
                 const file = new Blob(
                     [_base64ToArrayBuffer(data.data[0].Data)],

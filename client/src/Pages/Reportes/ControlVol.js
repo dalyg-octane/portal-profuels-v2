@@ -89,7 +89,7 @@ export const Reportes = () => {
                     {
                         fcorte.map(m => {
                             return (
-                                <div className="row" style={{ backgroundColor: 'white', padding: '1rem', height: '6rem', margin: '1% 15% 1% 15%', border: 'solid 1px rgba(0,0,0,0.1)', borderRadius: '5px' }}>
+                                <div className="row" style={{ backgroundColor: 'rgb(248,255,255)', padding: '1rem', height: '6rem', margin: '1% 15% 1% 15%', border: 'solid 1px rgba(0,0,0,0.1)', borderRadius: '5px' }}>
                                     <div className="col-md-4">
                                         <label style={{ fontWeight: 'bold', textTransform: 'capitalize' }}>{m.mes}</label>
                                     </div>

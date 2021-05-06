@@ -16,6 +16,7 @@ import Auxiliardemovimiento from './Pages/Profuels/auxiliardemovimiento'
 import AntiguedadDeSaldos from './Pages/Profuels/antiguedaddesaldos'
 import Informedesaldos from './Pages/Profuels/informedesaldos'
 import { Reportes } from './Pages/Reportes/ControlVol';
+import { Comision } from './Pages/Configuraciones/Comision';
 import {
     BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
@@ -28,6 +29,7 @@ ReactDOM.render(
             <Route path={`/home`} component={Landing} exact />
             <Route path={`/profuels`} component={Profuels} exact />
             <Route path={`/reportes`} component={Reportes} exact />
+            <Route path={`/configuraciones`} component={Comision} exact />
             <Route path={`/profuels/estadodecuenta`} component={Estadocuentaprofuels} exact />
             <Route path={`/profuels/auxiliardemovimientos`} component={Auxiliardemovimiento} exact />
             <Route path={`/profuels/antiguedaddesaldos`} component={AntiguedadDeSaldos} exact />

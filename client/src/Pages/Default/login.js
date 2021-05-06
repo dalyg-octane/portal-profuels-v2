@@ -46,6 +46,7 @@ export class login extends React.Component {
 
                 UsrModel.userName = data.userName;
                 UsrModel.isLoggedIn = true;
+                UsrModel.roles = data.roles;
 
             } else if (data && !data.success) {
 

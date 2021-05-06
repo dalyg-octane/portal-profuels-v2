@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { UserLogo } from '../Components/DynamicComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faBell, faFire, faHome, faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt,faCogs, faFire, faHome, faChartLine } from '@fortawesome/free-solid-svg-icons'
 import UsrModel from '../Models/UsrCredentials'
-import { Badge, Typography, Breadcrumbs } from '@material-ui/core'
-import MailIcon from '@material-ui/icons/Mail'
+import { Breadcrumbs } from '@material-ui/core'
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 
@@ -34,22 +33,14 @@ export const HorizonNavBar = () => {
                         <Link color="inherit" to='/home'>
                             Home
                         </Link>
-                        {/* <Link color="inherit" to='#'>
-                            Core
-                        </Link>
-                        <Typography color="textPrimary">Breadcrumb</Typography> */}
                     </Breadcrumbs>
                 </li>
 
                 <li className='navHor-item'>
-                    {/* <Badge badgeContent={10} color='secondary' className={'horIcon'}>
-                        <MailIcon />
-                    </Badge>
-                    <FontAwesomeIcon icon={faBell} size={'lg'} className={'horIcon'} /> */}
                     <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'}/></Link>
+                    {/* <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link> */}
                     <Link to='/reportes' className={'horIcon'}><FontAwesomeIcon icon={faChartLine} size={'lg'} color={'#183153'} title={'Reportes'} /></Link>
                     <Link to='/profuels' className={'horIcon'}><FontAwesomeIcon icon={faFire} size={'lg'} color={'#FF9600'} title={'Profuels'} /></Link>
-
                 </li>
             </ul>
         </nav>

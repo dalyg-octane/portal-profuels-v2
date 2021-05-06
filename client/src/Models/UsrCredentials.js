@@ -5,7 +5,8 @@ class UsrModel {
         extendObservable(this, {
             loading: true,
             isLoggedIn: false,
-            userName: ''
+            userName: '',
+            roles: '',
         });
     }
 }

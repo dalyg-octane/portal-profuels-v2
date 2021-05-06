@@ -9,6 +9,7 @@ import GasPriceElement from '../../Components/GasPrices'
 import { TankChart } from '../../Components/TankCharts';
 import Radio from '@material-ui/core/Radio';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { toJS } from 'mobx'
 import axios from 'axios'
 
 export const Landing = () => {
@@ -123,7 +124,7 @@ export const Landing = () => {
           <br />
           <div className="flex-container">
             <div className="flex-item">
-              <h6 className="custom-h6">Informaciónde inventarios en tanques 6:00am</h6>
+              <h6 className="custom-h6">Información de inventarios en tanques 6:00am</h6>
               <br />
               <TankChart></TankChart>
             </div>
