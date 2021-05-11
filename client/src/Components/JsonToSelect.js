@@ -23,7 +23,9 @@ const JsonToSelect = ({ data, label, func }) => {
                     value={dataSel}
                     onChange={(e) => {
                         handleChange(e);
+                        if(func) {
                         func(`sel${label}`);
+                        }
                     }}
                     inputProps={{
                         name: `${label}`,

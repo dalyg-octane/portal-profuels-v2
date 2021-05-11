@@ -15,7 +15,6 @@ export const Reportes = () => {
     const [data, setData] = useState([]);
     const [fcorte, setFcorte] = useState([]);
     const [isLoading, setLoading] = useState(false);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         ScrollTop();

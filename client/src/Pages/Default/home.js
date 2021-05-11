@@ -9,7 +9,6 @@ import GasPriceElement from '../../Components/GasPrices'
 import { TankChart } from '../../Components/TankCharts';
 import Radio from '@material-ui/core/Radio';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { toJS } from 'mobx'
 import axios from 'axios'
 
 export const Landing = () => {

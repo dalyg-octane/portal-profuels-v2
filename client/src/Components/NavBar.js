@@ -38,7 +38,7 @@ export const HorizonNavBar = () => {
 
                 <li className='navHor-item'>
                     <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'}/></Link>
-                    {/* <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link> */}
+                    <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link>
                     <Link to='/reportes' className={'horIcon'}><FontAwesomeIcon icon={faChartLine} size={'lg'} color={'#183153'} title={'Reportes'} /></Link>
                     <Link to='/profuels' className={'horIcon'}><FontAwesomeIcon icon={faFire} size={'lg'} color={'#FF9600'} title={'Profuels'} /></Link>
                 </li>

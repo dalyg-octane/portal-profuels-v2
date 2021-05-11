@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-//var url = 'http://localhost:8000/api'
-var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
+var url = 'http://localhost:8000/api'
+//var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
 
 class Router {
 
@@ -27,8 +27,238 @@ class Router {
         this.GetRazonesSociales(App);
         this.GetFechaCorte(App);
         this.GetCtrlVolFile(App);
+        this.GetProductos(App);
+        this.InsertComision(App);
+        this.GetComisiones(App);
 
     }
+
+    GetComisiones(App) {
+
+        App.post('/GetComisiones', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetComisionByUsrKey?UsrKey=${u.Llave}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
+    InsertComision(App) {
+
+        App.post('/InsertComision', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/InsertComisionProd?UsrKey=${u.Llave}&IdZona=${0}&IdEst=${req.body.idEst}&IdProd=${req.body.IdProd}&Monto=${req.body.Monto}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
+
+    GetCtrlVolFile(App) {
+
+        App.post('/GetCtrlVolFile', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetCtrlVolFile?opc=${req.body.opc}&est=${req.body.est}&fechacorte=${req.body.fcorte}`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
+
+    GetProductos(App) {
+
+        App.post('/GetProductos', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetProductos`,
+                    body: JSON.stringify(u),
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+
+    }
+
 
     GetCtrlVolFile(App) {
 

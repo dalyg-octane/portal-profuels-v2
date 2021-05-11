@@ -8,17 +8,54 @@ import TextField from '@material-ui/core/TextField';
 import { Radio, FormLabel, FormControlLabel, FormControl, RadioGroup, Button } from '@material-ui/core';
 import JsonToSelect from '../../Components/JsonToSelect'
 import SaveIcon from '@material-ui/icons/Save';
-
+import { NormalTable } from '../../Components/Table';
 import axios from 'axios'
 
 export const Comision = () => {
 
     const [data, setData] = useState([]);
     const [selectedValue, setSelectedValue] = React.useState('0');
+    const [dataTbl, setDataTbl] = useState([]);
 
     useEffect(() => {
         ScrollTop();
+        prodList();
+        GetComisiones();
     }, []);
+
+    const prodList = async () => {
+        try {
+            const { data } = await axios.post('/GetProductos', {});
+            setData(data.data);
+        } catch (e) {
+            console.log(e);
+        }
+    };
+    const SaveComision = async () => {
+
+        var selProd = document.getElementById('selLinea').value;
+        var comAmt = document.getElementById('inpComision').value;
+
+        const { data } = await axios.post(`/InsertComision`, { IdZona: 0, idEst: 0, IdProd: selProd, Monto: comAmt });
+
+        if (data && data.success) {
+            GetComisiones();
+        }
+
+    }
+
+    const GetComisiones = async () => {
+
+        try {
+            const { data } = await axios.post('/GetComisiones', {});
+            if (data && data.success) {
+                setDataTbl(data.data);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
@@ -57,6 +94,7 @@ export const Comision = () => {
                                         onChange={handleChange}
                                         label="Zona"
                                         labelPlacement="start"
+                                        disabled
                                     />
                                     <FormControlLabel
                                         value="3"
@@ -64,6 +102,7 @@ export const Comision = () => {
                                         onChange={handleChange}
                                         label="Estación"
                                         labelPlacement="start"
+                                        disabled
                                     />
 
                                 </RadioGroup>
@@ -78,14 +117,14 @@ export const Comision = () => {
                                     return (
                                         <>
                                             <div className='col-md-3'>
-                                                <JsonToSelect data={data} label='Linea' func={handleChange}></JsonToSelect>
+                                                <JsonToSelect data={data} label='Linea'></JsonToSelect>
                                             </div>
                                             {/* <div className='col-md-3'>
                                                 <JsonToSelect data={data} label='Grupo' func={handleChange}></JsonToSelect>
                                             </div> */}
                                             <div className='col-md-4'>
                                                 <TextField
-                                                    id="standard-basic"
+                                                    id="inpComision"
                                                     label="Comisión"
                                                     type="number"
                                                 />
@@ -96,10 +135,10 @@ export const Comision = () => {
                                     return (
                                         <>
                                             <div className='col-md-3'>
-                                                <JsonToSelect data={data} label='Linea' func={handleChange}></JsonToSelect>
+                                                <JsonToSelect data={data} label='Linea'></JsonToSelect>
                                             </div>
                                             <div className='col-md-3'>
-                                                <JsonToSelect data={data} label='Zona' func={handleChange}></JsonToSelect>
+                                                <JsonToSelect data={data} label='Zona'></JsonToSelect>
                                             </div>
                                             <div className='col-md-4'>
                                                 <TextField
@@ -114,10 +153,10 @@ export const Comision = () => {
                                     return (
                                         <>
                                             <div className='col-md-3'>
-                                                <JsonToSelect data={data} label='Linea' func={handleChange}></JsonToSelect>
+                                                <JsonToSelect data={data} label='Linea'></JsonToSelect>
                                             </div>
                                             <div className='col-md-3'>
-                                                <JsonToSelect data={data} label='Estación' func={handleChange}></JsonToSelect>
+                                                <JsonToSelect data={data} label='Estación'></JsonToSelect>
                                             </div>
                                             <div className='col-md-4'>
                                                 <TextField
@@ -146,6 +185,9 @@ export const Comision = () => {
                                     color="primary"
                                     size="small"
                                     startIcon={<SaveIcon />}
+                                    onClick={() => {
+                                        SaveComision();
+                                    }}
                                 >
                                     Guardar
                                     </Button>
@@ -155,6 +197,12 @@ export const Comision = () => {
                         <>
                         </>
                     }
+                    <br></br>
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            <NormalTable data={dataTbl} opc={false}></NormalTable>
+                        </div>
+                    </div>
                 </div>
                 <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
             </main>
