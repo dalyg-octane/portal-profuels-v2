@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { UserLogo } from '../Components/DynamicComponents';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt,faCogs, faFire, faHome, faChartLine } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt,faCogs, faFire, faHome, faChartLine, faTicketAlt } from '@fortawesome/free-solid-svg-icons'
 import UsrModel from '../Models/UsrCredentials'
 import { Breadcrumbs } from '@material-ui/core'
 import { Link } from 'react-router-dom';
@@ -38,7 +38,8 @@ export const HorizonNavBar = () => {
 
                 <li className='navHor-item'>
                     <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'}/></Link>
-                    <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link>
+                    {/* <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link> */}
+                    <a href='https://helpdesk.grupoeco.com.mx/logon.asp' target='_blank' className={'horIcon'}><FontAwesomeIcon icon={faTicketAlt} size={'lg'} color={'#183153'} title={'Helpdesk'}></FontAwesomeIcon></a>
                     <Link to='/reportes' className={'horIcon'}><FontAwesomeIcon icon={faChartLine} size={'lg'} color={'#183153'} title={'Reportes'} /></Link>
                     <Link to='/profuels' className={'horIcon'}><FontAwesomeIcon icon={faFire} size={'lg'} color={'#FF9600'} title={'Profuels'} /></Link>
                 </li>
