@@ -12,7 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios'
 
-export const NormalTable = ({ data, docsCol }) => {
+export const NormalTable = ({ data, docsCol,title }) => {
 
     var columns = [];
     const [isLoading, setLoading] = useState(false);
@@ -103,7 +103,7 @@ export const NormalTable = ({ data, docsCol }) => {
     return (
         <>
             <MUIDataTable
-                title={"Estaciones"}
+                title={title}
                 data={data.length ? data : data1}
                 columns={columns.length ? columns : columns1}
                 options={{

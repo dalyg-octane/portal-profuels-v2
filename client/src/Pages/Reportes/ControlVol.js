@@ -10,7 +10,7 @@ import { IconButton } from '@material-ui/core/';
 import Tooltip from '@material-ui/core/Tooltip';
 import axios from 'axios'
 
-export const Reportes = () => {
+export const ControlVol = () => {
 
     const [data, setData] = useState([]);
     const [fcorte, setFcorte] = useState([]);
@@ -112,7 +112,6 @@ export const Reportes = () => {
                             )
                         })
                     }
-
                 </div>
                 <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
             </main>

@@ -45,7 +45,7 @@ const Antiguedaddesaldos = () => {
                     <br></br>
                     <div className='row'>
                         <div className='col-md-12'>
-                            <NormalTable data={data} opc={false}></NormalTable>
+                            <NormalTable data={data} opc={false} title='Antiguedad de saldos'></NormalTable>
                         </div>
                     </div>
                 </div>
