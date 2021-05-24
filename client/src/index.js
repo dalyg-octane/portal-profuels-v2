@@ -19,7 +19,6 @@ import { Reportes } from './Pages/Reportes/Reportes';
 import { Comision } from './Pages/Configuraciones/Comision';
 import { ControlVol } from './Pages/Reportes/ControlVol';
 import { Facturasemitidas } from './Pages/Reportes/Facturasemitidas';
-
 import {
     BrowserRouter as Router, Switch, Route
 } from "react-router-dom";

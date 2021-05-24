@@ -21,7 +21,9 @@ export const Facturasemitidas = () => {
     const [isLoading, setLoading] = useState(true);
     var todayD = new Date();
     const [fechaFin, setFechaFin] = useState(todayD.toISOString().slice(0, 10));
+    todayD.setDate(todayD.getDate() - 3);
     const [fechaIni, setFechaIni] = useState(todayD.toISOString().slice(0, 10));
+
 
     useEffect(() => {
 
@@ -56,6 +58,7 @@ export const Facturasemitidas = () => {
                 console.log(e);
             }
         } else {
+            setLoading(false);
             setOpen(true);
         }
 
@@ -116,6 +119,7 @@ export const Facturasemitidas = () => {
                                 className={classes.button}
                                 startIcon={<SearchIcon />}
                                 onClick={() => {
+                                    setLoading(true);
                                     consultaMov();
                                 }}
                             >

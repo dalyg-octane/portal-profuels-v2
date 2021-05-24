@@ -18,8 +18,9 @@ export const NormalTable = ({ data, docsCol,title }) => {
     const [isLoading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
-    const columns1 = ["Sin información"];
-    const data1 = [[""]];
+    const noCols = ["Sin información"];
+    const noData = [[""]];
+
     const handleClose = (r) => {
         if (r === 'clickaway') {
             return;
@@ -104,8 +105,8 @@ export const NormalTable = ({ data, docsCol,title }) => {
         <>
             <MUIDataTable
                 title={title}
-                data={data.length ? data : data1}
-                columns={columns.length ? columns : columns1}
+                data={data.length ? data : noData}
+                columns={columns.length ? columns : noCols}
                 options={{
                     selectableRows: 'none'
                 }}

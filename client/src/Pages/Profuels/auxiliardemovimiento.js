@@ -8,8 +8,10 @@ import TextField from '@material-ui/core/TextField';
 import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import SearchIcon from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
 import axios from 'axios'
+import moment from "moment";
 
 const Auxiliardemovimiento = () => {
 
@@ -17,11 +19,11 @@ const Auxiliardemovimiento = () => {
     const [data, setData] = useState([]);
     const [open, setOpen] = useState(false);
     const [isLoading, setLoading] = useState(true);
-
     var todayD = new Date();
     const [fechaFin, setFechaFin] = useState(todayD.toISOString().slice(0, 10));
     todayD.setDate(todayD.getDate() - 3);
     const [fechaIni, setFechaIni] = useState(todayD.toISOString().slice(0, 10));
+
 
 
     useEffect(() => {
@@ -39,6 +41,9 @@ const Auxiliardemovimiento = () => {
 
     const consultaMov = async () => {
 
+        var fechaFin = document.getElementById('dateFinal').value;
+        var fechaIni = document.getElementById('dateInicio').value;
+
         if (fechaFin >= fechaIni) {
             try {
                 const { data } = await axios.post('/getTransactions', { fechaInicial: fechaIni, fechaFinal: fechaFin });
@@ -54,6 +59,7 @@ const Auxiliardemovimiento = () => {
                 console.log(e);
             }
         } else {
+            setLoading(false);
             setOpen(true);
         }
 
@@ -86,37 +92,42 @@ const Auxiliardemovimiento = () => {
                                 label="Inicio"
                                 type="date"
                                 defaultValue={fechaIni}
-                                onChange={(e) => {
-                                    if (!isLoading) {
-                                        setLoading(true);
-                                    }
-                                    setFechaIni(e.target.value)
-                                    consultaMov();
-                                    // consultaMov();
-                                }}
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                onChange={e => setFechaIni(e.target.value)}
+
                             />
                             <TextField
                                 id="dateFinal"
                                 label="Final"
                                 type="date"
                                 defaultValue={fechaFin}
-                                onChange={(e) => {
-                                    if (!isLoading) {
-                                        setLoading(true);
-                                    }
-                                    setFechaFin(e.target.value)
-                                    consultaMov();
-                                    // consultaMov();
-                                }}
                                 className={classes.textField}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                                onChange={e => setFechaFin(e.target.value)}
                             />
+                        </div>
+                    </div>
+                    <br></br>
+                    <div className='row'>
+                        <div className='col-md-3'>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                startIcon={<SearchIcon />}
+                                onClick={() => {
+                                    setLoading(true);
+                                    consultaMov();
+                                }}
+                            >
+                                Generar
+                            </Button>
                         </div>
                     </div>
                     <br></br>
