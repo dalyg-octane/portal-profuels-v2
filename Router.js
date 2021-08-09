@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-var url = 'http://localhost:8000/api'
-//var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
+//var url = 'http://localhost:8000/api'
+var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
 
 class Router {
 

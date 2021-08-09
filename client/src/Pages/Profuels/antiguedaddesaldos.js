@@ -17,6 +17,16 @@ const Antiguedaddesaldos = () => {
 
         try {
             const { data } = await axios.post('/GetAntiguedad/', {});
+            const dataFormat = data.data.map((e)=>{
+
+                var rObj = {
+                    'Estación':e['Estación'],
+                    'Al dia':formatter.format(e['Al dia'])
+                };
+                return rObj;
+
+                // return formatter.format(e['Al dia']);
+            })
             setData(data.data);
         } catch (e) {
             console.log(e);
@@ -53,5 +63,9 @@ const Antiguedaddesaldos = () => {
         </React.Fragment>
     )
 }
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
 
 export default Antiguedaddesaldos

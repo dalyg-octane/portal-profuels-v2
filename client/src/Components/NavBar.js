@@ -37,7 +37,7 @@ export const HorizonNavBar = () => {
                 </li>
 
                 <li className='navHor-item'>
-                    <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'}/></Link>
+                    <Link to='/home' className={'horIcon'}><FontAwesomeIcon icon={faHome} size={'lg'} color={'#183153'} title={'Home'} /></Link>
                     {/* <Link to='/configuraciones' className={'horIcon'}><FontAwesomeIcon icon={faCogs} size={'lg'} color={'#183153'} title={'Configuraciones'} /></Link> */}
                     <a href='https://helpdesk.grupoeco.com.mx/logon.asp' target='_blank' rel="noopener noreferrer" className={'horIcon'}><FontAwesomeIcon icon={faTicketAlt} size={'lg'} color={'#183153'} title={'Helpdesk'}></FontAwesomeIcon></a>
                     <Link to='/reportes' className={'horIcon'}><FontAwesomeIcon icon={faChartLine} size={'lg'} color={'#183153'} title={'Reportes'} /></Link>
@@ -64,7 +64,7 @@ export const NavBar = ({ text }) => {
         } catch (e) {
             console.log(e);
         }
-        
+
     }
 
     const OpenLink = async (Llave) => {

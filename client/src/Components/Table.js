@@ -17,7 +17,6 @@ export const NormalTable = ({ data, docsCol,title }) => {
     var columns = [];
     const [isLoading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
-
     const noCols = ["Sin información"];
     const noData = [[""]];
 
@@ -108,9 +107,17 @@ export const NormalTable = ({ data, docsCol,title }) => {
                 data={data.length ? data : noData}
                 columns={columns.length ? columns : noCols}
                 options={{
-                    selectableRows: 'none'
+                    selectableRows: 'none',
+                    downloadOptions: {
+                        filterOptions: {
+                        useDisplayedColumnsOnly: true,
+                        useDisplayedRowsOnly: true,
+                        }
+                    }
+                    
                 }}
             />
+            
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                 <Alert onClose={handleClose} severity="error">
                     Hubo un problema al consultar la factura.

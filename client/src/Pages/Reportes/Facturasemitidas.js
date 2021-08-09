@@ -26,7 +26,6 @@ export const Facturasemitidas = () => {
 
 
     useEffect(() => {
-
         consultaMov();
 
     }, []);// eslint-disable-line react-hooks/exhaustive-deps

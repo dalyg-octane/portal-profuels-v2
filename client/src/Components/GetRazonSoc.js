@@ -14,6 +14,7 @@ export const GetRazonSoc = ({ onclick }) => {
         GetRazocSociales();
     }, []);
 
+
     return (
         <>
             {data.length > 1 ?
@@ -22,10 +23,11 @@ export const GetRazonSoc = ({ onclick }) => {
                     <div className='flex-container hoverEl'>
                         {data.map((e) => {
                             return (
-                                <div key={e.Id} id={e.Id} className='flex-item' style={{ textAlign: 'center' }} onClick={onclick}>
-                                    <p>{e.Nombre}</p>
-                                    <p>{`${e.Est}`}</p>
-                                </div>
+                                <button key={e.Id} id={e.Id} className='flex-item' style={{ textAlign: 'center' }} onClick={onclick}>
+                                    {e.Nombre}
+                                    <br></br>
+                                    {`${e.Est}`}
+                                </button>
                             )
                         })}
                     </div>

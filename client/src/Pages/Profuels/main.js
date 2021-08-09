@@ -36,8 +36,6 @@ export const Profuels = () => {
         try {
 
             setSaldo(false)
-
-
             if (typeof e === 'boolean') {
                 const { data } = await axios.post('/GetSaldos', { rfc: '' });
                 setData(data.data);
