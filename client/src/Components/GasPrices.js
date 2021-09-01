@@ -74,6 +74,14 @@ const GasPriceElement = ({ data }) => {
                                                     )
                                                 })}
                                             </tr>
+                                            <tr>
+                                                <td key='puFlete'>Flete</td>
+                                                {e[1].map((e, i) => {
+                                                    return (
+                                                        <td key={`thFlete-${i}`}>{e['Flete']}</td>
+                                                    )
+                                                })}
+                                            </tr>
                                             <tr style={{ borderTop: '1px solid rgb(220,220,220)' }}>
                                                 <td key='puIVA'>Precio con IVA</td>
                                                 {e[1].map((e, i) => {
