@@ -23,6 +23,7 @@ export const App = observer(() => {
   } else {
     return (
       <Redirect to=''></Redirect>
+
     );
   }
 
