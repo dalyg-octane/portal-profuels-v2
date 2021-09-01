@@ -31,6 +31,7 @@ class Router {
         this.InsertComision(App);
         this.GetComisiones(App);
         this.GetFactEmitidas(App);
+        this.GetVentasPerifericosProductoOficial(App);
 
     }
 
@@ -857,8 +858,6 @@ class Router {
         });
     }
 
-
-
     GetEstaciones(App) {
 
         App.post('/GetEstaciones', (req, res) => {
@@ -1025,6 +1024,64 @@ class Router {
             }
         });
     }
+
+
+    GetVentasPerifericosProductoOficial(App) {
+
+        App.post('/GetVentasPerifericosProductoOficial', (req, res) => {
+
+            try {
+
+                const u = req.session.User;
+                console.log(req.session.User);
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/GetVentasPerifericosProductoOficial?Opcion=${req.body.opc}&FechaInicial=${req.body.FechaInicial}&FechaFinal=${req.body.FechaFinal}&ZonaId=${req.body.ZonaId}&IdEstacion=${req.body.EstacionId}&LineaPerifericoId=${req.body.LineaPerifericoId}&TipoInforme=${req.body.TipoInforme}`,
+                    // "url": `${url}/GetVentasPerifericosProductoOficial?Opcion=2&FechaInicial=2021-08-30&FechaFinal=2021-08-31&ZonaId=0&IdEstacion=6902&LineaPerifericoId=0&TipoInforme=A`,
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+                    if (body) {
+
+                        const apiRes = JSON.parse(body);
+
+                        res.json({
+                            success: true,
+                            data: apiRes
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
 
     downloafAcctFile(App) {
 

@@ -20,6 +20,7 @@ import { Comision } from './Pages/Configuraciones/Comision';
 import { ControlVol } from './Pages/Reportes/ControlVol';
 import { Facturasemitidas } from './Pages/Reportes/Facturasemitidas';
 import {VentaPerifericosProdutoOficial} from './Pages/Reportes/Rotativa';
+import { VentasPerifericosPorProductoyOficial } from './Pages/Reportes/VentasPerifericosPorProductoyOficial';
 import {
     BrowserRouter as Router, Switch, Route
 } from "react-router-dom";
@@ -39,8 +40,8 @@ ReactDOM.render(
             <Route path={`/profuels/auxiliardemovimientos`} component={Auxiliardemovimiento} exact />
             <Route path={`/profuels/antiguedaddesaldos`} component={AntiguedadDeSaldos} exact />
             <Route path={`/profuels/informedesaldos`} component={Informedesaldos} exact />
-            <Route path={`/reportes/VentaPerifericosProductoOficial`} component={VentaPerifericosProdutoOficial} exact />
-            
+            <Route path={`/reportes/VentaPerifericosProductoOficial`} component={VentaPerifericosProdutoOficial} exact />//Daly
+            <Route path={`/reportes/VentasPerifericosPorProductoyOficial`} component={VentasPerifericosPorProductoyOficial} exact />//Fau
         </Switch>
         <App></App>
     </Router>

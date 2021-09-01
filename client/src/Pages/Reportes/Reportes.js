@@ -30,9 +30,9 @@ export const Reportes = () => {
                     </Link>
                 </div>
                 <div className='flex-item-cards-btn'>
-                    <Link to='/reportes/VentaPerifericosProductoOficial'>
+                    <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
                         <Button variant="contained" color="primary" fullWidth={true}>
-                            Rotativa
+                            Ventas Perifericos por Producto y Oficial
                         </Button>
                     </Link>
                 </div>
