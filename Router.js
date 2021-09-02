@@ -1,7 +1,7 @@
 const { response } = require("express");
 var Request = require("request");
-//var url = 'http://localhost:8000/api'
-var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
+var url = 'http://localhost:8000/api'
+//var url = 'https://portal.grupoeco.com.mx/sirexa/api/'
 
 class Router {
 
@@ -32,8 +32,64 @@ class Router {
         this.GetComisiones(App);
         this.GetFactEmitidas(App);
         this.GetVentasPerifericosProductoOficial(App);
+        this.VentasPorOficialYProducto(App);
 
     }
+
+
+    VentasPorOficialYProducto(App) {
+
+        App.post('/PerifericosProductoYOficialPDF', (req, res) => {
+
+            try {
+
+                Request.get({
+                    "headers": { "content-type": "application/json" },
+                    "url": `${url}/PerifericosProductoYOficialPDF?Opcion=${req.body.opc}&FechaInicial=${req.body.FechaInicial}&FechaFinal=${req.body.FechaFinal}&ZonaId=${req.body.ZonaId}&IdEstacion=${req.body.EstacionId}&LineaPerifericoId=${req.body.LineaPerifericoId}&TipoInforme=${req.body.TipoInforme}`,
+                }, (error, response, body) => {
+
+                    if (error) {
+
+                        res.json({
+                            success: false,
+                            msg: error
+                        });
+
+                        return false;
+
+                    }
+
+
+                    const userResponse = JSON.parse(body);
+                    console.log(userResponse);
+                    if (userResponse) {
+
+                        res.json({
+                            success: true,
+                            File: userResponse
+                        });
+
+                    } else {
+
+                        res.json({
+                            success: false,
+                        });
+
+                    }
+
+                });
+
+            } catch (e) {
+
+                res.json({
+                    success: false,
+                    msg: e
+                });
+
+            }
+        });
+    }
+
 
     GetFactEmitidas(App) {
 

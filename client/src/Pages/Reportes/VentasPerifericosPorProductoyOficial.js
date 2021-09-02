@@ -33,18 +33,52 @@ export const VentasPerifericosPorProductoyOficial = () => {
     GetDataReporte();
   };
 
+  const VentasPerifericosProductoYOficialPDF = async () => {
+
+    var fechaFin = document.getElementById("dateFinalRepPerif").value;
+    var fechaIni = document.getElementById("dateInicioRepPerif").value;
+    var selEst = document.getElementById('selEstacion').value
+    if (selEst != '') {
+      try {
+        const { data } = await axios.post('/VentasOficialProductoOficial', {
+          opc: 3,
+          FechaInicial: fechaIni,
+          FechaFinal: fechaFin,
+          ZonaId: 0,
+          EstacionId: selEst,
+          LineaPerifericoId: 0,
+          TipoInforme: "A",
+        });
+
+        var jsonRes = JSON.parse(data.File);
+        const file = new Blob(
+          [_base64ToArrayBuffer(jsonRes)],
+          { type: 'application/pdf' });
+        let url = window.URL.createObjectURL(file);
+        let a = document.createElement('a');
+        a.href = url;
+        a.download = `Reporte`;
+        a.click();
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      alert('Seleccione una estación');
+    }
+  }
   //obtener Reporte Perifericos
   const GetDataReporte = async () => {
+
     var fechaFin = document.getElementById("dateFinalRepPerif").value;
     var fechaIni = document.getElementById("dateInicioRepPerif").value;
     var selEst = document.getElementById('selEstacion').value
 
 
-    if( selEst != ''){
-
+    if (selEst != '') {
+      setLoading(true);
       try {
         const { data } = await axios.post(
-          "/GetVentasPerifericosProductoOficial",
+          "/PerifericosProductoYOficialPDF",
           {
             opc: 2,
             FechaInicial: fechaIni,
@@ -56,8 +90,8 @@ export const VentasPerifericosPorProductoyOficial = () => {
           }
         );
         if (data && data.success) {
-          console.log(data);
           setReportedata(data.data);
+          setLoading(false);
         } else {
           setReportedata([]);
         }
@@ -65,9 +99,8 @@ export const VentasPerifericosPorProductoyOficial = () => {
         console.log(e);
       }
     }
-    else{
+    else {
       alert('Seleccione una estación');
-
     }
 
   };
@@ -166,7 +199,8 @@ export const VentasPerifericosPorProductoyOficial = () => {
                 size="small"
                 className={classes.button}
                 startIcon={<SearchIcon />}
-                onClick={() => {  Generar();
+                onClick={() => {
+                  Generar();
                   // setLoading(true);
                 }}
               >
@@ -187,6 +221,9 @@ export const VentasPerifericosPorProductoyOficial = () => {
                   data={reportedata}
                   docsCol={false}
                   title="Reporte Ventas Perifericos  por producto y oficial"
+                  pdf={1}
+                  onclick={VentasPerifericosProductoYOficialPDF}
+
                 ></NormalTable>
               )}
             </div>
@@ -206,7 +243,16 @@ export const VentasPerifericosPorProductoyOficial = () => {
     </>
   );
 };
+function _base64ToArrayBuffer(base64) {
 
+  var binary_string = window.atob(base64);
+  var len = binary_string.length;
+  var bytes = new Uint8Array(len);
+  for (var i = 0; i < len; i++) {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes.buffer;
+}
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
