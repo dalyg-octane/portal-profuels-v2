@@ -12,7 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios'
 
-export const NormalTable = ({ data, docsCol,title }) => {
+export const NormalTable = ({ data, docsCol, title, pdf, onclick }) => {
 
     var columns = [];
     const [isLoading, setLoading] = useState(false);
@@ -110,14 +110,24 @@ export const NormalTable = ({ data, docsCol,title }) => {
                     selectableRows: 'none',
                     downloadOptions: {
                         filterOptions: {
-                        useDisplayedColumnsOnly: true,
-                        useDisplayedRowsOnly: true,
+                            useDisplayedColumnsOnly: true,
+                            useDisplayedRowsOnly: true,
                         }
+                    },
+                    customToolbar: () => {
+                        if (pdf) {
+                            return (
+                                <IconButton aria-label="expand row" size="small" disabled={isLoading} onClick={onclick}>
+                                    <PictureAsPdfOutlinedIcon color={(isLoading) ? 'disabled' : 'secondary'} fontSize={'large'}></PictureAsPdfOutlinedIcon>
+                                </IconButton>
+                            );
+                        }
+
                     }
-                    
                 }}
+
             />
-            
+
             <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
                 <Alert onClose={handleClose} severity="error">
                     Hubo un problema al consultar la factura.

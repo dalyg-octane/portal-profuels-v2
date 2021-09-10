@@ -67,18 +67,18 @@ const GasPriceElement = ({ data }) => {
                                                 })}
                                             </tr>
                                             <tr>
-                                                <td key='puPM'>Precio molécula</td>
-                                                {e[1].map((e, i) => {
-                                                    return (
-                                                        <td key={`thPM-${i}`}>{e['Precio molecula']}</td>
-                                                    )
-                                                })}
-                                            </tr>
-                                            <tr>
                                                 <td key='puFlete'>Flete</td>
                                                 {e[1].map((e, i) => {
                                                     return (
                                                         <td key={`thFlete-${i}`}>{e['Flete']}</td>
+                                                    )
+                                                })}
+                                            </tr>
+                                            <tr>
+                                                <td key='puPM'>Precio molécula</td>
+                                                {e[1].map((e, i) => {
+                                                    return (
+                                                        <td key={`thPM-${i}`}>{e['Precio molecula']}</td>
                                                     )
                                                 })}
                                             </tr>
