@@ -29,13 +29,13 @@ export const Reportes = () => {
                         </Button>
                     </Link>
                 </div>
-                {/* <div className='flex-item-cards-btn'>
+                <div className='flex-item-cards-btn'>
                     <Link to='/reportes/VentasPerifericosPorProductoyOficial'>
                         <Button variant="contained" color="primary" fullWidth={true}>
                             Ventas Perifericos por Producto y Oficial
                         </Button>
                     </Link>
-                </div> */}
+                </div>
             </div>
             <a id='hoverUp' href='/#'><FontAwesomeIcon icon={faChevronUp} /></a>
         </main>

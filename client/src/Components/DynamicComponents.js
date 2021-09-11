@@ -146,6 +146,10 @@ export const EdoCta = () => {
         try {
             setLoading(true);
             const { data } = await axios.post('/downloadAcctSmt', { Fecha: fechaCorte, IdCia: IdCIa });
+
+            console.log(JSON.parse(data));
+            console.log(JSON.parse(JSON.parse(JSON.parse(data.data))))
+            
             var jsonRes = JSON.parse(JSON.parse(JSON.parse(data.data)));
             const file = new Blob(
                 [_base64ToArrayBuffer(jsonRes[0].File)],
