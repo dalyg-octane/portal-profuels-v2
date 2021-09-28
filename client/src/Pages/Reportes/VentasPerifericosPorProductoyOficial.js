@@ -94,6 +94,7 @@ export const VentasPerifericosPorProductoyOficial = () => {
           setReportedata(data.data);
           setLoading(false);
         } else {
+          setLoading(false);
           setReportedata([]);
         }
       } catch (e) {
